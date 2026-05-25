@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RideEase — AI-Powered Car & Bike Rental Simulator</title>
+  <!-- Google Fonts & Tailwind-like CSS variables -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Icons via FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-primary: #0A0F1D;
+      --bg-secondary: #121829;
+      --bg-card: #1E293B;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --accent: #F59E0B;
+      --accent-hover: #D97706;
+      --accent-light: rgba(245, 158, 11, 0.1);
+      --success: #10B981;
+      --success-light: rgba(16, 185, 129, 0.1);
+      --danger: #EF4444;
+      --danger-light: rgba(239, 68, 68, 0.1);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glass: rgba(18, 24, 41, 0.7);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #F1F5F9;
+      --bg-secondary: #FFFFFF;
+      --bg-card: #F8FAFC;
+      --text-primary: #0F172A;
+      --text-secondary: #64748B;
+      --accent: #D97706;
+      --accent-hover: #B45309;
+      --accent-light: rgba(217, 119, 6, 0.1);
+      --success: #059669;
+      --success-light: rgba(5, 150, 105, 0.1);
+      --danger: #DC2626;
+      --danger-light: rgba(220, 38, 38, 0.1);
+      --border-color: rgba(15, 23, 42, 0.08);
+      --glass: rgba(255, 255, 255, 0.85);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.3s, border-color 0.3s, color 0.15s;
+    }
+
+    body {
+      background-color: #030712;
+      background-image: radial-gradient(circle at 10% 20%, rgba(10, 15, 29, 0.8) 0%, rgba(3, 7, 18, 1) 90%);
+      color: #E2E8F0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Overall Layout: Device container and Info sidebar */
+    .simulator-wrapper {
+      display: flex;
+      max-width: 1200px;
+      width: 100%;
+      gap: 40px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Info Panel on Desktop */
+    .info-panel {
+      flex: 1;
+      min-width: 320px;
+      max-width: 480px;
+      padding: 20px;
+    }
+
+    .info-panel h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .info-panel h1 span {
+      color: #F59E0B;
+      background: linear-gradient(to right, #F59E0B, #10B981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .info-panel p {
+      color: #94A3B8;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .feature-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .tech-stack {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .tech-tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .developer-instructions {
+      background: #111827;
+      border-left: 4px solid #F59E0B;
+      padding: 15px;
+      border-radius: 4px 8px 8px 4px;
+    }
+
+    .developer-instructions h3 {
+      font-size: 0.95rem;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+
+    .developer-instructions ul {
+      list-style-type: none;
+      font-size: 0.85rem;
+      color: #94A3B8;
+    }
+
+    .developer-instructions li {
+      margin-bottom: 6px;
+      padding-left: 12px;
+      position: relative;
+    }
+
+    .developer-instructions li::before {
+      content: "•";
+      color: #F59E0B;
+      position: absolute;
+      left: 0;
+    }
+
+    /* DEVICE SIMULATOR SHELL */
+    .phone-simulator {
+      width: 390px;
+      height: 820px;
+      background: #000000;
+      border-radius: 55px;
+      border: 12px solid #222224;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 4px #45454a;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Notch, camera, speaker */
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 30px;
+      background: #000000;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .phone-notch::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background: #111;
+      border-radius: 50%;
+      margin-left: 20px;
+    }
+
+    /* Phone Screen Container */
+    .phone-screen {
+      flex: 1;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border-radius: 43px;
+      padding-top: 30px; /* Safe area for status bar */
+    }
+
+    /* Status Bar simulated */
+    .status-bar {
+      height: 24px;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      z-index: 999;
+      position: relative;
+    }
+
+    .status-bar .icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    /* Bottom Home Indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 5px;
+      background: var(--text-secondary);
+      border-radius: 10px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    /* Bottom Tab Navigation Bar */
+    .nav-bar {
+      height: 68px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: 12px;
+      z-index: 999;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 600;
+      flex: 1;
+      height: 100%;
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+    }
+
+    /* SCREENS CONTAINER */
+    .screen-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Each screen pane */
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 16px 20px;
+      padding-bottom: 24px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Custom Scrollbar for Phone Simulator */
+    .screen::-webkit-scrollbar {
+      width: 4px;
+    }
+    .screen::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .screen::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    /* SHARED UI ELEMENTS */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      margin-bottom: 16px;
+    }
+
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #000000;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--accent-light);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: var(--accent);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #FFFFFF;
+    }
+
+    .btn-danger:hover {
+      background: #B91C1C;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 8px;
+      width: auto;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+
+    /* FIX: Explicitly style option elements inside select controls to be perfectly visible in both Light/Dark themes */
+    select.form-control option {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    /* AUTH SCREEN SPECIFIC */
+    .auth-bg {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 30px;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo-icon {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+
+    .logo-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #FFFFFF;
+    }
+
+    .logo-title span {
+      color: var(--accent);
+    }
+
+    .auth-toggle-text {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 16px;
+      cursor: pointer;
+    }
+
+    .auth-toggle-text span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* HOME SCREEN SPECIFIC */
+    .home-header {
+      margin-bottom: 20px;
+    }
+
+    .welcome-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .user-greeting {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .search-bar-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-bar-container i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .search-bar-container input {
+      padding-left: 45px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      height: 0;
+    }
+
+    .filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary); /* Changed to text-primary to be perfectly visible in both Light/Dark themes */
+      opacity: 0.65; /* Slight fade for elegant inactive look */
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      opacity: 0.85;
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: #000000;
+      border-color: var(--accent);
+      opacity: 1; /* Full opacity for active tab */
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* VEHICLE CARD */
+    .vehicle-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .vehicle-card-img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .vehicle-status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-available {
+      background: var(--success);
+      color: #FFFFFF;
+    }
+
+    .badge-booked {
+      background: var(--danger);
+      color: #FFFFFF;
+    }
+
+    .vehicle-card-body {
+      padding: 16px;
+    }
+
+    .vehicle-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .vehicle-spec-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .vehicle-spec-item {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vehicle-footer {
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .vehicle-price {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .vehicle-price span {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* DIGITAL WALLET CARD */
+    .credit-card {
+      background: linear-gradient(135deg, #0A1628 0%, #1E1B4B 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .credit-card::before {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 50%;
+      top: -30px;
+      right: -30px;
+    }
+
+    .card-chip {
+      width: 40px;
+      height: 30px;
+      background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%);
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .card-balance-lbl {
+      font-size: 0.75rem;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-balance {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 4px;
+    }
+
+    .card-holder-row {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .card-holder {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #E2E8F0;
+    }
+
+    .card-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      font-style: italic;
+    }
+
+    .card-logo span {
+      color: var(--accent);
+    }
+
+    /* QUICK CHIPS FOR WALLET DEPOSITS */
+    .deposit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .deposit-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .deposit-chip:hover, .deposit-chip.active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* TRANSACTION HISTORY ITEM */
+    .txn-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .txn-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .txn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    .txn-icon-credit {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .txn-icon-debit {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .txn-details h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .txn-details p {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .txn-amount {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .txn-amount.credit {
+      color: var(--success);
+    }
+
+    .txn-amount.debit {
+      color: var(--danger);
+    }
+
+    /* MAP CONTAINER */
+    .map-container {
+      height: 280px;
+      border-radius: 18px;
+      background: #1E293B;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .map-canvas {
+      width: 100%;
+      height: 100%;
+      background-color: #0E1726;
+      position: relative;
+    }
+
+    /* Simulated GPS pins */
+    .gps-dot {
+      width: 14px;
+      height: 14px;
+      background: #007AFF;
+      border: 2px solid #FFFFFF;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 0 10px rgba(0, 122, 255, 0.8);
+    }
+
+    .gps-pulse {
+      width: 36px;
+      height: 36px;
+      border: 2px solid #007AFF;
+      border-radius: 50%;
+      position: absolute;
+      animation: pulse 2s infinite ease-out;
+      opacity: 0;
+      transform: translate(-11px, -11px);
+    }
+
+    .vehicle-pin {
+      width: 24px;
+      height: 24px;
+      background: var(--accent);
+      border: 1.5px solid #FFFFFF;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .vehicle-pin i {
+      transform: rotate(45deg);
+      font-size: 0.7rem;
+      color: #000;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.5) translate(-18px, -18px);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(2.2) translate(-6px, -6px);
+        opacity: 0;
+      }
+    }
+
+    /* AI CHAT SCREEN SPECIFIC */
+    .ai-processing {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .ai-spinner {
+      font-size: 3rem;
+      color: var(--accent);
+      animation: spin 1.5s infinite linear;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .ai-recommendation-card {
+      border: 1px solid var(--accent);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(16, 185, 129, 0.03) 100%);
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .ai-response-body {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    .ai-response-body strong {
+      color: var(--accent);
+    }
+
+    /* BOOKING LIST CARD */
+    .booking-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .booking-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .booking-status {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .status-active {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .status-completed {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .status-cancelled {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .booking-detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .booking-detail-row strong {
+      color: var(--text-primary);
+    }
+
+    .booking-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+    }
+
+    /* DOCS UPLOAD PREVIEW */
+    .doc-upload-box {
+      border: 2px dashed var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .doc-upload-box:hover {
+      border-color: var(--accent);
+    }
+
+    .doc-preview-img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      display: none;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    /* MODAL WINDOW SIMULATION */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      justify-content: flex-end;
+      flex-direction: column;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      border-top: 1px solid var(--border-color);
+      padding: 24px;
+      max-height: 85%;
+      overflow-y: auto;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .close-btn {
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .close-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .theme-toggle-btn {
+      cursor: pointer;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+    }
+
+    /* DYNAMIC PRICE MATH ROW */
+    .price-breakdown {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 15px;
+      border: 1px solid var(--border-color);
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .price-row.total {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 8px;
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+
+    /* BADGE TAG LIST */
+    .badge-container {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .notification-banner {
+      background: var(--success);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 8px;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: none;
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+<div class="simulator-wrapper">
+  
+  <!-- Info sidebar -->
+  <div class="info-panel">
+    <div class="feature-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Powered Vehicle Advisor</div>
+    <h1>RideEase <span>Rental</span></h1>
+    <p>A high-end, responsive full-stack platform built with Node.js and Express backend, featuring a digital wallet system, GPS mapping, pre-booking verification checks, calendar math, and a custom Anthropic/OpenAI prompt recommendation layer.</p>
+    
+    <div class="tech-stack">
+      <div class="tech-tag"><i class="fa-brands fa-node-js" style="color: #10B981;"></i> Node.js & Express</div>
+      <div class="tech-tag"><i class="fa-solid fa-database" style="color: #4DB33D;"></i> MongoDB / JSON Fallback</div>
+      <div class="tech-tag"><i class="fa-solid fa-key" style="color: #F59E0B;"></i> JWT Security</div>
+      <div class="tech-tag"><i class="fa-solid fa-mobile-screen-button"></i> React Native (Expo) ready</div>
+    </div>
+    
+    <div class="developer-instructions">
+      <h3><i class="fa-solid fa-circle-info" style="color: #F59E0B;"></i> Interactive Simulator Guide:</h3>
+      <ul>
+        <li><strong>Auth:</strong> Register a new account to instantly receive <strong>PKR 10,000</strong> gift balance in your wallet.</li>
+        <li><strong>Docs Upload:</strong> CNIC & Driving License verification is enforced before renting. Submit simulated files on the profile tab or in the booking checkout.</li>
+        <li><strong>AI Recommend:</strong> Enter trip details to query the smart offline vehicle analyzer (matches constraints instantly).</li>
+        <li><strong>Location:</strong> The GPS Map tab shows actual location-coordinate pins of seeded vehicles in Lahore.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Physical Smartphone Shell -->
+  <div class="phone-simulator">
+    <div class="phone-notch"></div>
+    <div class="home-indicator"></div>
+    
+    <!-- Phone Screen -->
+    <div class="phone-screen" id="phoneScreen">
+      
+      <!-- Top Banner for Toast Notifications -->
+      <div class="notification-banner" id="banner">
+        Action executed successfully!
+      </div>
+
+      <!-- Simulated OS Status Bar -->
+      <div class="status-bar">
+        <span id="statusBarTime">15:08</span>
+        <div class="icons">
+          <i class="fa-solid fa-signal"></i>
+          <i class="fa-solid fa-wifi"></i>
+          <i class="fa-solid fa-battery-full"></i>
+        </div>
+      </div>
+
+      <!-- MAIN SCREENS HOLDER -->
+      <div class="screen-container">
+        
+        <!-- =================== SCREEN 1: LOGIN / REGISTER =================== -->
+        <div class="screen active" id="authScreen" style="padding: 0;">
+          <div class="auth-bg">
+            <div class="logo-container">
+              <i class="fa-solid fa-car-side logo-icon"></i>
+              <div class="logo-title">Ride<span>Ease</span></div>
+              <p style="font-size: 0.8rem; margin-top: 4px;">Smart Car & Bike Rentals</p>
+            </div>
+
+            <!-- Login Panel -->
+            <div id="loginPanel" style="width: 100%;">
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="loginEmail" class="form-control" placeholder="user@gmail.com" value="testuser@rideease.pk">
+              </div>
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label>Password</label>
+                <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" value="password123">
+              </div>
+              <button class="btn" onclick="handleLogin()">Sign In <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+              <div style="text-align: center;">
+                <p class="auth-toggle-text" onclick="toggleAuthPanel('register')">New to RideEase? <span>Create Account</span></p>
+              </div>
+            </div>
+
+            <!-- Register Panel -->
+            <div id="registerPanel" style="width: 100%; display: none;">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="regName" class="form-control" placeholder="Ali Ahmed">
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="regEmail" class="form-control" placeholder="ali@gmail.com">
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="regPhone" class="form-control" placeholder="03001234567">
+              </div>
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label>Password</label>
+                <input type="password" id="regPassword" class="form-control" placeholder="••••••••">
+              </div>
+              <button class="btn" onclick="handleRegister()">Sign Up <i class="fa-solid fa-user-plus"></i></button>
+              <div style="text-align: center;">
+                <p class="auth-toggle-text" onclick="toggleAuthPanel('login')">Already have an account? <span>Sign In</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================== SCREEN 2: HOME / LISTINGS =================== -->
+        <div class="screen" id="homeScreen">
+          <div class="home-header flex-row">
+            <div>
+              <p class="welcome-text">Assalam-o-Alaikum,</p>
+              <h2 class="user-greeting" id="homeUserGreeting">Guest User</h2>
+            </div>
+            <div class="theme-toggle-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="themeIcon"></i></div>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="search-bar-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" class="form-control" placeholder="Search cars, bikes, transmission..." onkeyup="filterListings()">
+          </div>
+
+          <!-- Quick Filters -->
+          <div class="filter-tabs">
+            <div class="filter-btn active" id="filterTabAll" onclick="setCategoryFilter('all')"><i class="fa-solid fa-border-all"></i> All</div>
+            <div class="filter-btn" id="filterTabCar" onclick="setCategoryFilter('car')"><i class="fa-solid fa-car"></i> Cars</div>
+            <div class="filter-btn" id="filterTabBike" onclick="setCategoryFilter('bike')"><i class="fa-solid fa-motorcycle"></i> Bikes</div>
+          </div>
+
+          <div class="section-title">
+            <span>Available Fleet</span>
+            <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;" id="vehicleCountText">0 items</span>
+          </div>
+
+          <!-- Vehicle Feed List -->
+          <div id="vehicleContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- =================== SCREEN 3: MAP VIEW =================== -->
+        <div class="screen" id="mapScreen">
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">Vehicles Nearby</h2>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">Based on your current GPS location coordinates</p>
+
+          <div class="map-container">
+            <div class="map-canvas" id="simulatedMap">
+              <!-- Grid styling to resemble a vector map -->
+              <div style="position: absolute; top:0; left:0; width:100%; height:100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 20px 20px;"></div>
+              
+              <!-- User GPS Dot -->
+              <div class="gps-dot" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+              <div class="gps-pulse" style="top: 50%; left: 50%;"></div>
+              
+              <!-- Vehicle Pins will be dynamically overlayed -->
+            </div>
+          </div>
+
+          <div class="glass-card" style="margin-bottom: 0;">
+            <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 6px;"><i class="fa-solid fa-location-crosshairs" style="color: #007AFF; margin-right: 6px;"></i> Proximity Details</h4>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">Seeded locations map around Gulberg and DHA, Lahore. Tap pins on the map above to inspect vehicle availability and book directly.</p>
+          </div>
+        </div>
+
+        <!-- =================== SCREEN 4: AI RECOMMENDER =================== -->
+        <div class="screen" id="aiScreen">
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">AI Recommendation</h2>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 20px;">Enter your trip metrics to generate optimal advice</p>
+
+          <!-- Input Panel Form -->
+          <div id="aiFormPanel">
+            <div class="form-group">
+              <label>Budget (PKR)</label>
+              <input type="number" id="aiBudget" class="form-control" value="20000">
+            </div>
+
+            <div class="form-group">
+              <label>Passengers</label>
+              <select id="aiPassengers" class="form-control">
+                <option value="1">1 Person (Solo)</option>
+                <option value="2" selected>2 People</option>
+                <option value="4">4 People</option>
+                <option value="5">5 People</option>
+                <option value="7">7 People (Family)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Trip Type</label>
+              <select id="aiTripType" class="form-control">
+                <option value="City travel" selected>City travel (Daily commute)</option>
+                <option value="Long distance">Long distance (Highway cruising)</option>
+                <option value="Family trip">Family trip (Spacious & relaxed)</option>
+                <option value="Adventure">Adventure (Rugged terrains)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Trip Duration (Days)</label>
+              <input type="number" id="aiDuration" class="form-control" value="3">
+            </div>
+
+            <div class="form-group">
+              <label>Fuel Preference</label>
+              <select id="aiFuel" class="form-control">
+                <option value="No preference" selected>No preference</option>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 24px;">
+              <label>Est. Daily Distance (KM)</label>
+              <input type="number" id="aiDistance" class="form-control" value="120">
+            </div>
+
+            <button class="btn" onclick="submitAIRecommend()"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze & Recommend</button>
+          </div>
+
+          <!-- Loading Screen state -->
+          <div class="ai-processing" id="aiLoading">
+            <i class="fa-solid fa-wand-magic-sparkles ai-spinner"></i>
+            <h3 style="font-weight: 700;">RideEase AI Consulting...</h3>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center; margin-top: 6px; padding: 0 20px;">Analyzing fuel ranges, passenger profiles, and budgets to select the perfect ride...</p>
+          </div>
+
+          <!-- AI Response Card -->
+          <div id="aiResponsePanel" style="display: none;">
+            <div class="ai-recommendation-card">
+              <div class="ai-badge"><i class="fa-solid fa-brain"></i> Recommended Match</div>
+              <div class="ai-response-body" id="aiResponseText">
+                <!-- AI dynamic recommendations -->
+              </div>
+            </div>
+            
+            <button class="btn" id="aiBookingLinkBtn" onclick="openDetailsFromAI()">Book Recommended Match <i class="fa-solid fa-circle-chevron-right"></i></button>
+            <button class="btn btn-outline" style="margin-top: 10px;" onclick="resetAIForm()">New Consultation</button>
+          </div>
+        </div>
+
+        <!-- =================== SCREEN 5: DIGITAL WALLET =================== -->
+        <div class="screen" id="walletScreen">
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">My Digital Wallet</h2>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 20px;">Top up funds and pay instantly without debit cards</p>
+
+          <!-- Visa/Mastercard Styled Card -->
+          <div class="credit-card">
+            <div class="flex-row" style="align-items: flex-start; margin-bottom: 0;">
+              <div>
+                <p class="card-balance-lbl">Active Balance</p>
+                <div class="card-balance" id="walletBalanceDisplay">PKR 0</div>
+              </div>
+              <div class="card-chip"></div>
+            </div>
+            <div class="card-holder-row">
+              <div>
+                <p style="font-size: 0.65rem; color: #94A3B8; text-transform: uppercase;">Card Holder</p>
+                <div class="card-holder" id="walletUserDisplay">User</div>
+              </div>
+              <div class="card-logo">Ride<span>Ease</span></div>
+            </div>
+          </div>
+
+          <!-- Quick Top-up -->
+          <div class="section-title">Quick Deposit Top-up</div>
+          <div class="deposit-grid">
+            <div class="deposit-chip" onclick="selectDepositAmount(5000)">+5,000</div>
+            <div class="deposit-chip active" onclick="selectDepositAmount(10000)">+10,000</div>
+            <div class="deposit-chip" onclick="selectDepositAmount(25000)">+25,000</div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <input type="number" id="customDepositAmount" class="form-control" placeholder="Enter custom amount (PKR)" oninput="clearChips()">
+          </div>
+          <button class="btn" style="margin-bottom: 24px;" onclick="handleTopUp()"><i class="fa-solid fa-wallet"></i> Top Up Balance</button>
+
+          <!-- Transaction Ledger -->
+          <div class="section-title">Transactions Ledger</div>
+          <div id="txnLedgerContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- =================== SCREEN 6: USER PROFILE / HISTORY =================== -->
+        <div class="screen" id="profileScreen">
+          <div class="home-header flex-row" style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; font-weight: 800;">My Rentals & Profile</h2>
+            <button class="btn btn-outline btn-sm" onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+          </div>
+
+          <!-- Document Status Badge Container -->
+          <div class="glass-card" style="margin-bottom: 24px;">
+            <h4 style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">Documentation Status</h4>
+            <div class="flex-row" style="margin-bottom: 12px;">
+              <span style="font-size: 0.8rem; color: var(--text-secondary);">CNIC Verification</span>
+              <span id="cnicBadge" class="booking-status status-cancelled">Unverified</span>
+            </div>
+            <div class="flex-row" style="margin-bottom: 16px;">
+              <span style="font-size: 0.8rem; color: var(--text-secondary);">License Verification</span>
+              <span id="licenseBadge" class="booking-status status-cancelled">Unverified</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="profileUploadBtn" onclick="openDocsUploadModal()">Verify Credentials <i class="fa-solid fa-shield-halved"></i></button>
+          </div>
+
+          <!-- Damage Reporting Hub trigger -->
+          <div class="section-title">Trip Management</div>
+          <div class="glass-card" style="padding: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="openDamageReportModal()">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <i class="fa-solid fa-triangle-exclamation" style="color: var(--accent); font-size: 1.2rem;"></i>
+              <div>
+                <h5 style="font-weight: 700; font-size: 0.82rem;">Submit Damage Report</h5>
+                <p style="font-size: 0.7rem; color: var(--text-secondary);">Post-trip reports flagged for review</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right" style="color: var(--text-secondary); font-size: 0.8rem;"></i>
+          </div>
+
+          <!-- Booking Records -->
+          <div class="section-title">Rental Booking History</div>
+          <div id="bookingHistoryContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM NAVIGATION BAR (Shown after login) -->
+      <div class="nav-bar" id="bottomNav" style="display: none;">
+        <div class="nav-item active" id="navTabHome" onclick="switchScreen('home')">
+          <i class="fa-solid fa-car"></i>
+          <span>Rent</span>
+        </div>
+        <div class="nav-item" id="navTabMap" onclick="switchScreen('map')">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>Nearby</span>
+        </div>
+        <div class="nav-item" id="navTabAI" onclick="switchScreen('ai')">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>AI Match</span>
+        </div>
+        <div class="nav-item" id="navTabWallet" onclick="switchScreen('wallet')">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Wallet</span>
+        </div>
+        <div class="nav-item" id="navTabProfile" onclick="switchScreen('profile')">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>History</span>
+        </div>
+      </div>
+
+      <!-- =================== SIMULATED MODALS SYSTEM =================== -->
+      
+      <!-- Modal A: VEHICLE DETAIL & PRICE CALCULATOR -->
+      <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="detailTitle">Vehicle Details</h3>
+            <i class="fa-solid fa-xmark close-btn" onclick="closeModal('detailModal')"></i>
+          </div>
+
+          <img src="" id="detailImage" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 16px; background: rgba(255,255,255,0.02);" alt="Vehicle">
+          
+          <div class="badge-container" id="detailBadges">
+            <!-- tags -->
+          </div>
+
+          <p id="detailDescription" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px;">
+            Description details...
+          </p>
+
+          <div class="section-title">Rental Booking Details</div>
+          
+          <!-- CALENDAR & CALCULATOR CARD -->
+          <div class="glass-card" style="margin-bottom: 20px;">
+            <div class="form-group">
+              <label>Pickup Location</label>
+              <input type="text" id="calcLocation" class="form-control" value="Gulberg III, Lahore">
+            </div>
+            
+            <div class="form-group">
+              <label>Pickup Date</label>
+              <input type="date" id="calcPickupDate" class="form-control" onchange="runPriceCalculator()">
+            </div>
+
+            <div class="form-group">
+              <label>Return Date</label>
+              <input type="date" id="calcReturnDate" class="form-control" onchange="runPriceCalculator()">
+            </div>
+
+            <!-- Optional Add-ons -->
+            <div class="flex-row" style="margin-bottom: 10px; margin-top: 15px;">
+              <span style="font-size: 0.8rem; font-weight: 600;"><i class="fa-solid fa-shield-heart" style="color: var(--success); margin-right: 6px;"></i> Full Collision Insurance (+1,500/day)</span>
+              <input type="checkbox" id="addInsurance" style="width: 18px; height: 18px; accent-color: var(--accent);" onchange="runPriceCalculator()">
+            </div>
+
+            <div class="flex-row" style="margin-bottom: 10px;">
+              <span style="font-size: 0.8rem; font-weight: 600;"><i class="fa-solid fa-truck-ramp-box" style="color: var(--accent); margin-right: 6px;"></i> Doorstep Delivery (+2,000 flat)</span>
+              <input type="checkbox" id="addDelivery" style="width: 18px; height: 18px; accent-color: var(--accent);" onchange="runPriceCalculator()">
+            </div>
+
+            <!-- Price breakdown calculator -->
+            <div class="price-breakdown">
+              <div class="price-row">
+                <span>Daily Rate</span>
+                <span id="breakdownDailyRate">PKR 0/day</span>
+              </div>
+              <div class="price-row">
+                <span>Duration</span>
+                <span id="breakdownDays">0 Days</span>
+              </div>
+              <div class="price-row">
+                <span>Base Charge</span>
+                <span id="breakdownBase">PKR 0</span>
+              </div>
+              <div class="price-row" id="insuranceFeeRow" style="display: none;">
+                <span>Premium Insurance</span>
+                <span id="breakdownInsurance">PKR 0</span>
+              </div>
+              <div class="price-row" id="deliveryFeeRow" style="display: none;">
+                <span>Home Delivery Fee</span>
+                <span id="breakdownDelivery">PKR 0</span>
+              </div>
+              <div class="price-row total">
+                <span>Total Bill (PKR)</span>
+                <span id="breakdownTotal">PKR 0</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn" onclick="executeBookingOrder()">Confirm & Rent Vehicle <i class="fa-solid fa-credit-card"></i></button>
+        </div>
+      </div>
+
+      <!-- Modal B: CNIC & LICENSE UPLOAD -->
+      <div class="modal-overlay" id="docsModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Identity Verification</h3>
+            <i class="fa-solid fa-xmark close-btn" onclick="closeModal('docsModal')"></i>
+          </div>
+          
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 20px;">Upload government documents to confirm vehicle driving insurance compliance.</p>
+
+          <div class="form-group">
+            <label>CNIC (National Identity Card)</label>
+            <div class="doc-upload-box" onclick="simulateDocUpload('cnic')">
+              <i class="fa-solid fa-address-card" style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 8px;" id="cnicUploadIcon"></i>
+              <h5 style="font-size: 0.8rem; font-weight: 700;" id="cnicUploadTitle">Tap to Upload CNIC Photo</h5>
+              <p style="font-size: 0.65rem; color: var(--text-secondary);">Image or PDF format support</p>
+              <img src="" id="cnicPreview" class="doc-preview-img" alt="CNIC preview">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label>Driving License (Front)</label>
+            <div class="doc-upload-box" onclick="simulateDocUpload('license')">
+              <i class="fa-solid fa-id-card-clip" style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 8px;" id="licenseUploadIcon"></i>
+              <h5 style="font-size: 0.8rem; font-weight: 700;" id="licenseUploadTitle">Tap to Upload Driving License</h5>
+              <p style="font-size: 0.65rem; color: var(--text-secondary);">Image or PDF format support</p>
+              <img src="" id="licensePreview" class="doc-preview-img" alt="License preview">
+            </div>
+          </div>
+
+          <button class="btn" onclick="handleDocumentUploadSubmit()">Submit & Verify Documents <i class="fa-solid fa-circle-check"></i></button>
+        </div>
+      </div>
+
+      <!-- Modal C: DAMAGE REPORTING SUBMISSION -->
+      <div class="modal-overlay" id="damageModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Damage Incident Report</h3>
+            <i class="fa-solid fa-xmark close-btn" onclick="closeModal('damageModal')"></i>
+          </div>
+
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">Have you encountered scratch, dent, or accident? Report photo and logs for inspections.</p>
+
+          <div class="form-group">
+            <label>Select Booking</label>
+            <select id="damageBookingSelect" class="form-control">
+              <!-- Dynamically populated from active/completed bookings -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Damage Description</label>
+            <textarea id="damageDesc" class="form-control" rows="3" placeholder="Explain the incident, location of scratch, dent..."></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label>Damage Visual Evidence</label>
+            <div class="doc-upload-box" onclick="simulateDocUpload('damage')">
+              <i class="fa-solid fa-camera-retro" style="font-size: 2.2rem; color: var(--text-secondary); margin-bottom: 8px;" id="damageUploadIcon"></i>
+              <h5 style="font-size: 0.8rem; font-weight: 700;" id="damageUploadTitle">Tap to Take/Upload Photo</h5>
+              <p style="font-size: 0.65rem; color: var(--text-secondary);">Multiple file views supported</p>
+              <img src="" id="damagePreview" class="doc-preview-img" alt="Damage preview">
+            </div>
+          </div>
+
+          <button class="btn btn-danger" onclick="submitDamageLog()">File Injury Report <i class="fa-solid fa-flag"></i></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- INTERACTIVE SIMULATOR CLIENT CORE LOGIC -->
+<script>
+  let BASE_URL = window.location.origin; // automatically dynamic
+  let USER_TOKEN = localStorage.getItem('rideease_token') || null;
+  let CURRENT_USER = null;
+  let VEHICLES_LIST = [];
+  
+  // App active view states
+  let currentActiveTab = 'home';
+  let activeCategory = 'all';
+  let selectedVehicleIdForBooking = null;
+  let activeDepositAmount = 10000;
+  
+  // Mock image data for document previews
+  const simulatedCnicImage = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300"; // Elegant pattern
+  const simulatedLicenseImage = "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&q=80&w=300"; // Card layout
+  const simulatedDamageImage = "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=300"; // Scratch pattern
+
+  // Helper variables for documents simulated uploads
+  let cnicUploadedSimulated = false;
+  let licenseUploadedSimulated = false;
+  let damagePhotoUploadedSimulated = false;
+
+  // On page load
+  window.addEventListener('DOMContentLoaded', () => {
+    // Set simulated clock in top status bar
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('statusBarTime').innerText = now.toTimeString().substring(0, 5);
+    }, 1000);
+    
+    // Auto-setup calendar fields with reasonable dates
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 2);
+    
+    document.getElementById('calcPickupDate').value = today.toISOString().split('T')[0];
+    document.getElementById('calcPickupDate').min = today.toISOString().split('T')[0];
+    document.getElementById('calcReturnDate').value = tomorrow.toISOString().split('T')[0];
+    document.getElementById('calcReturnDate').min = today.toISOString().split('T')[0];
+
+    // Check token
+    if (USER_TOKEN) {
+      fetchUserProfile();
+    } else {
+      switchScreen('auth');
+    }
+  });
+
+  // Switch Screens helper
+  function switchScreen(screenName) {
+    // Lock navbar hidden on auth screen
+    if (screenName === 'auth') {
+      document.getElementById('bottomNav').style.display = 'none';
+    } else {
+      document.getElementById('bottomNav').style.display = 'flex';
+    }
+
+    // Toggle active screen classes
+    const screens = ['authScreen', 'homeScreen', 'mapScreen', 'aiScreen', 'walletScreen', 'profileScreen'];
+    screens.forEach(s => {
+      document.getElementById(s).classList.remove('active');
+    });
+
+    const activeMap = {
+      'auth': 'authScreen',
+      'home': 'homeScreen',
+      'map': 'mapScreen',
+      'ai': 'aiScreen',
+      'wallet': 'walletScreen',
+      'profile': 'profileScreen'
+    };
+
+    document.getElementById(activeMap[screenName]).classList.add('active');
+    currentActiveTab = screenName;
+
+    // Toggle navbar active classes
+    const navItems = ['navTabHome', 'navTabMap', 'navTabAI', 'navTabWallet', 'navTabProfile'];
+    navItems.forEach(n => {
+      document.getElementById(n).classList.remove('active');
+    });
+
+    const navItemMap = {
+      'home': 'navTabHome',
+      'map': 'navTabMap',
+      'ai': 'navTabAI',
+      'wallet': 'navTabWallet',
+      'profile': 'navTabProfile'
+    };
+
+    if (navItemMap[screenName]) {
+      document.getElementById(navItemMap[screenName]).classList.add('active');
+    }
+
+    // Load dynamic data on switch
+    if (screenName === 'home') {
+      loadVehicles();
+    } else if (screenName === 'wallet') {
+      loadWalletData();
+    } else if (screenName === 'profile') {
+      loadBookingHistory();
+    } else if (screenName === 'map') {
+      renderMapPins();
+    }
+  }
+
+  // Toast Notification Banner
+  function showBanner(message, type = 'success') {
+    const banner = document.getElementById('banner');
+    banner.innerText = message;
+    banner.style.backgroundColor = type === 'success' ? 'var(--success)' : 'var(--danger)';
+    banner.style.color = type === 'success' ? '#000' : '#FFF';
+    banner.style.display = 'block';
+    
+    setTimeout(() => {
+      banner.style.display = 'none';
+    }, 3500);
+  }
+
+  // =================== AUTH ACTIONS ===================
+  
+  function toggleAuthPanel(panel) {
+    if (panel === 'register') {
+      document.getElementById('loginPanel').style.display = 'none';
+      document.getElementById('registerPanel').style.display = 'block';
+    } else {
+      document.getElementById('loginPanel').style.display = 'block';
+      document.getElementById('registerPanel').style.display = 'none';
+    }
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        localStorage.setItem('rideease_token', data.token);
+        USER_TOKEN = data.token;
+        CURRENT_USER = data.user;
+        
+        showBanner(`Welcome back, ${data.user.name}!`);
+        syncUserInfoUI();
+        switchScreen('home');
+      } else {
+        showBanner(data.message || 'Login failed', 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Failed to contact login service', 'danger');
+    }
+  }
+
+  async function handleRegister() {
+    const name = document.getElementById('regName').value;
+    const email = document.getElementById('regEmail').value;
+    const phone = document.getElementById('regPhone').value;
+    const password = document.getElementById('regPassword').value;
+
+    if (!name || !email || !password) {
+      showBanner('Please fill out all mandatory fields', 'danger');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, password })
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem('rideease_token', data.token);
+        USER_TOKEN = data.token;
+        CURRENT_USER = data.user;
+        
+        showBanner(`Account created! Gift PKR 10,000 credited to wallet!`);
+        syncUserInfoUI();
+        switchScreen('home');
+      } else {
+        showBanner(data.message || 'Registration failed', 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Failed to contact registration service', 'danger');
+    }
+  }
+
+  async function fetchUserProfile() {
+    try {
+      const response = await fetch(`${BASE_URL}/api/auth/profile`, {
+        headers: { 'Authorization': `Bearer ${USER_TOKEN}` }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        CURRENT_USER = data.user;
+        syncUserInfoUI();
+        switchScreen('home');
+      } else {
+        handleLogout();
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Offline mode or failed profile sync', 'danger');
+      handleLogout();
+    }
+  }
+
+  function syncUserInfoUI() {
+    if (!CURRENT_USER) return;
+    document.getElementById('homeUserGreeting').innerText = CURRENT_USER.name;
+    document.getElementById('walletUserDisplay').innerText = CURRENT_USER.name;
+    document.getElementById('walletBalanceDisplay').innerText = `PKR ${CURRENT_USER.walletBalance.toLocaleString()}`;
+    
+    // Sync verification badges
+    const cnicBadge = document.getElementById('cnicBadge');
+    const licenseBadge = document.getElementById('licenseBadge');
+    
+    if (CURRENT_USER.cnicUploaded) {
+      cnicBadge.innerText = 'Verified';
+      cnicBadge.className = 'booking-status status-completed';
+    } else {
+      cnicBadge.innerText = 'Unverified';
+      cnicBadge.className = 'booking-status status-cancelled';
+    }
+
+    if (CURRENT_USER.licenseUploaded) {
+      licenseBadge.innerText = 'Verified';
+      licenseBadge.className = 'booking-status status-completed';
+    } else {
+      licenseBadge.innerText = 'Unverified';
+      licenseBadge.className = 'booking-status status-cancelled';
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('rideease_token');
+    USER_TOKEN = null;
+    CURRENT_USER = null;
+    switchScreen('auth');
+  }
+
+  // =================== VEHICLE LISTING FLOW ===================
+  
+  async function loadVehicles() {
+    try {
+      let url = `${BASE_URL}/api/vehicles`;
+      if (activeCategory !== 'all') {
+        url += `?type=${activeCategory}`;
+      }
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.success) {
+        VEHICLES_LIST = data.vehicles;
+        renderVehicleCards(VEHICLES_LIST);
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Failed to load fleet listings', 'danger');
+    }
+  }
+
+  function renderVehicleCards(vehicles) {
+    const container = document.getElementById('vehicleContainer');
+    container.innerHTML = '';
+    
+    document.getElementById('vehicleCountText').innerText = `${vehicles.length} items`;
+
+    if (vehicles.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 10px; color: var(--text-secondary);">
+          <i class="fa-solid fa-car-rear" style="font-size: 2.2rem; opacity: 0.3; margin-bottom: 10px;"></i>
+          <p style="font-size: 0.85rem;">No matching vehicles found in this category.</p>
+        </div>
+      `;
+      return;
+    }
+
+    vehicles.forEach(vehicle => {
+      const card = document.createElement('div');
+      card.className = 'vehicle-card';
+      
+      const statusBadge = vehicle.isAvailable 
+        ? `<div class="vehicle-status-badge badge-available">Available</div>`
+        : `<div class="vehicle-status-badge badge-booked">Booked</div>`;
+
+      // Seating label mapping
+      const seatsText = vehicle.type === 'car' ? `${vehicle.seatingCapacity} Seater` : 'Solo/Dual Rider';
+
+      // Badge tags
+      const badgesHTML = (vehicle.badges || [])
+        .map(b => `<div class="badge-tag">${b}</div>`)
+        .join('');
+
+      card.innerHTML = `
+        <img src="${vehicle.image}" class="vehicle-card-img" alt="${vehicle.name}">
+        ${statusBadge}
+        <div class="vehicle-card-body">
+          <div class="badge-container">${badgesHTML}</div>
+          <h3 class="vehicle-name">${vehicle.name}</h3>
+          
+          <div class="vehicle-spec-row">
+            <div class="vehicle-spec-item"><i class="fa-solid fa-gears"></i> ${vehicle.transmission}</div>
+            <div class="vehicle-spec-item"><i class="fa-solid fa-gas-pump"></i> ${vehicle.fuelType}</div>
+            <div class="vehicle-spec-item"><i class="fa-solid fa-users"></i> ${seatsText}</div>
+          </div>
+          
+          <div class="vehicle-footer">
+            <div class="vehicle-price">PKR ${vehicle.pricePerDay.toLocaleString()} <span>/ day</span></div>
+            <button class="btn btn-sm" onclick="openVehicleDetails('${vehicle._id}')">Rent Now <i class="fa-solid fa-circle-arrow-right"></i></button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function setCategoryFilter(category) {
+    activeCategory = category;
+    
+    // Switch active classes
+    const tabs = ['filterTabAll', 'filterTabCar', 'filterTabBike'];
+    tabs.forEach(t => document.getElementById(t).classList.remove('active'));
+    
+    const activeTabMap = { 'all': 'filterTabAll', 'car': 'filterTabCar', 'bike': 'filterTabBike' };
+    document.getElementById(activeTabMap[category]).classList.add('active');
+    
+    loadVehicles();
+  }
+
+  function filterListings() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = VEHICLES_LIST.filter(v => 
+      v.name.toLowerCase().includes(query) || 
+      v.description.toLowerCase().includes(query) ||
+      v.fuelType.toLowerCase().includes(query) ||
+      v.transmission.toLowerCase().includes(query)
+    );
+    renderVehicleCards(filtered);
+  }
+
+  // =================== VEHICLE DETAILS & BOOKING MATH ===================
+  
+  function openVehicleDetails(vehicleId) {
+    const vehicle = VEHICLES_LIST.find(v => v._id === vehicleId);
+    if (!vehicle) return;
+    
+    selectedVehicleIdForBooking = vehicleId;
+    
+    // Set UI details
+    document.getElementById('detailTitle').innerText = vehicle.name;
+    document.getElementById('detailImage').src = vehicle.image;
+    document.getElementById('detailDescription').innerText = vehicle.description || `${vehicle.name} provides luxurious drive with premium support. Enjoy smooth rides on and off-road.`;
+    
+    const badgeContainer = document.getElementById('detailBadges');
+    badgeContainer.innerHTML = '';
+    (vehicle.badges || []).forEach(badge => {
+      badgeContainer.innerHTML += `<div class="badge-tag" style="border-color: var(--accent); color: var(--accent);">${badge}</div>`;
+    });
+    badgeContainer.innerHTML += `<div class="badge-tag">${vehicle.transmission}</div>`;
+    badgeContainer.innerHTML += `<div class="badge-tag">${vehicle.fuelType}</div>`;
+
+    // Reset calculators add-ons checkboxes
+    document.getElementById('addInsurance').checked = false;
+    document.getElementById('addDelivery').checked = false;
+
+    // Run price calculator once to establish initial price
+    runPriceCalculator();
+
+    // Show modal overlay
+    document.getElementById('detailModal').style.display = 'flex';
+  }
+
+  function runPriceCalculator() {
+    const vehicle = VEHICLES_LIST.find(v => v._id === selectedVehicleIdForBooking);
+    if (!vehicle) return;
+
+    const pickupDateStr = document.getElementById('calcPickupDate').value;
+    const returnDateStr = document.getElementById('calcReturnDate').value;
+    
+    const pDate = new Date(pickupDateStr);
+    const rDate = new Date(returnDateStr);
+    
+    const timeDiff = rDate.getTime() - pDate.getTime();
+    let totalDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if (totalDays <= 0 || isNaN(totalDays)) totalDays = 1;
+
+    // Checkboxes
+    const insuranceSelected = document.getElementById('addInsurance').checked;
+    const deliverySelected = document.getElementById('addDelivery').checked;
+
+    // Calculations
+    const baseDailyRate = vehicle.pricePerDay;
+    const baseCost = baseDailyRate * totalDays;
+    
+    const insuranceDailyRate = 1500;
+    const insuranceFee = insuranceSelected ? insuranceDailyRate * totalDays : 0;
+    
+    const deliveryFee = deliverySelected ? 2000 : 0;
+    
+    const totalCost = baseCost + insuranceFee + deliveryFee;
+
+    // Sync Breakdown UI
+    document.getElementById('breakdownDailyRate').innerText = `PKR ${baseDailyRate.toLocaleString()}/day`;
+    document.getElementById('breakdownDays').innerText = `${totalDays} ${totalDays === 1 ? 'Day' : 'Days'}`;
+    document.getElementById('breakdownBase').innerText = `PKR ${baseCost.toLocaleString()}`;
+    
+    const insRow = document.getElementById('insuranceFeeRow');
+    if (insuranceSelected) {
+      insRow.style.display = 'flex';
+      document.getElementById('breakdownInsurance').innerText = `PKR ${insuranceFee.toLocaleString()}`;
+    } else {
+      insRow.style.display = 'none';
+    }
+
+    const delRow = document.getElementById('deliveryFeeRow');
+    if (deliverySelected) {
+      delRow.style.display = 'flex';
+      document.getElementById('breakdownDelivery').innerText = `PKR ${deliveryFee.toLocaleString()}`;
+    } else {
+      delRow.style.display = 'none';
+    }
+
+    document.getElementById('breakdownTotal').innerText = `PKR ${totalCost.toLocaleString()}`;
+  }
+
+  async function executeBookingOrder() {
+    if (!USER_TOKEN) {
+      showBanner('Please sign in to register a booking', 'danger');
+      closeModal('detailModal');
+      switchScreen('auth');
+      return;
+    }
+
+    // Document safety gate check
+    if (!CURRENT_USER.cnicUploaded || !CURRENT_USER.licenseUploaded) {
+      showBanner('Security Notice: Credentials Verification required!', 'danger');
+      closeModal('detailModal');
+      openDocsUploadModal();
+      return;
+    }
+
+    const vehicleId = selectedVehicleIdForBooking;
+    const pickupDate = document.getElementById('calcPickupDate').value;
+    const returnDate = document.getElementById('calcReturnDate').value;
+    const pickupLocation = document.getElementById('calcLocation').value;
+    const insuranceSelected = document.getElementById('addInsurance').checked;
+    const deliverySelected = document.getElementById('addDelivery').checked;
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${USER_TOKEN}`
+        },
+        body: JSON.stringify({
+          vehicleId,
+          pickupDate,
+          returnDate,
+          pickupLocation,
+          insuranceSelected,
+          deliverySelected
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        showBanner(data.message || 'Booking Confirmed! Wallet charged.');
+        CURRENT_USER.walletBalance = data.newWalletBalance;
+        syncUserInfoUI();
+        closeModal('detailModal');
+        switchScreen('profile'); // Send to booking history list
+      } else {
+        showBanner(data.message || 'Booking rejected', 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Server integration error placing booking', 'danger');
+    }
+  }
+
+  // =================== WALLET SYSTEM ===================
+  
+  async function loadWalletData() {
+    if (!USER_TOKEN) return;
+    try {
+      const response = await fetch(`${BASE_URL}/api/wallet`, {
+        headers: { 'Authorization': `Bearer ${USER_TOKEN}` }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        document.getElementById('walletBalanceDisplay').innerText = `PKR ${data.balance.toLocaleString()}`;
+        if (CURRENT_USER) {
+          CURRENT_USER.walletBalance = data.balance;
+          syncUserInfoUI();
+        }
+        renderLedger(data.transactions);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function selectDepositAmount(val) {
+    activeDepositAmount = val;
+    document.getElementById('customDepositAmount').value = '';
+    
+    // Switch active chip UI
+    const chips = document.querySelectorAll('.deposit-chip');
+    chips.forEach(c => c.classList.remove('active'));
+    
+    event.target.classList.add('active');
+  }
+
+  function clearChips() {
+    const chips = document.querySelectorAll('.deposit-chip');
+    chips.forEach(c => c.classList.remove('active'));
+    activeDepositAmount = 0;
+  }
+
+  async function handleTopUp() {
+    let deposit = activeDepositAmount;
+    const customVal = parseFloat(document.getElementById('customDepositAmount').value);
+    
+    if (customVal > 0) {
+      deposit = customVal;
+    }
+
+    if (!deposit || deposit <= 0) {
+      showBanner('Please select or specify a valid top-up amount', 'danger');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/wallet/top-up`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${USER_TOKEN}`
+        },
+        body: JSON.stringify({ amount: deposit })
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showBanner(data.message);
+        document.getElementById('customDepositAmount').value = '';
+        CURRENT_USER.walletBalance = data.balance;
+        syncUserInfoUI();
+        renderLedger(data.transactions);
+      } else {
+        showBanner(data.message || 'Top-up failed', 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Top-up service is offline', 'danger');
+    }
+  }
+
+  function renderLedger(txns) {
+    const container = document.getElementById('txnLedgerContainer');
+    container.innerHTML = '';
+
+    if (!txns || txns.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.78rem;">
+          No transactions recorded yet.
+        </div>
+      `;
+      return;
+    }
+
+    txns.forEach(t => {
+      const isCredit = t.type === 'Credit';
+      const icon = isCredit ? '<i class="fa-solid fa-arrow-down-left"></i>' : '<i class="fa-solid fa-arrow-up-right"></i>';
+      const iconClass = isCredit ? 'txn-icon-credit' : 'txn-icon-debit';
+      const sign = isCredit ? '+' : '-';
+      const amountClass = isCredit ? 'credit' : 'debit';
+      
+      const date = new Date(t.createdAt).toLocaleDateString('en-PK', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const item = document.createElement('div');
+      item.className = 'txn-item';
+      item.innerHTML = `
+        <div class="txn-left">
+          <div class="txn-icon ${iconClass}">${icon}</div>
+          <div class="txn-details">
+            <h4>${t.description}</h4>
+            <p>${date}</p>
+          </div>
+        </div>
+        <div class="txn-amount ${amountClass}">${sign} PKR ${t.amount.toLocaleString()}</div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  // =================== AI VEHICLE RECOMMENDER FLOW ===================
+  
+  async function submitAIRecommend() {
+    if (!USER_TOKEN) {
+      showBanner('Please sign in to consulting the AI assistant', 'danger');
+      switchScreen('auth');
+      return;
+    }
+
+    const budget = parseFloat(document.getElementById('aiBudget').value);
+    const passengers = parseInt(document.getElementById('aiPassengers').value, 10);
+    const tripType = document.getElementById('aiTripType').value;
+    const duration = parseInt(document.getElementById('aiDuration').value, 10);
+    const fuelPreference = document.getElementById('aiFuel').value;
+    const dailyDistance = parseFloat(document.getElementById('aiDistance').value);
+
+    // Enter processing screen
+    document.getElementById('aiFormPanel').style.display = 'none';
+    document.getElementById('aiLoading').style.display = 'flex';
+    
+    // Simple artificial time delay for outstanding premium aesthetic UX (feel like real thinking AI processing)
+    setTimeout(async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/ai/recommend`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${USER_TOKEN}`
+          },
+          body: JSON.stringify({
+            budget,
+            passengers,
+            tripType,
+            duration,
+            fuelPreference,
+            dailyDistance
+          })
+        });
+
+        const data = await response.json();
+        
+        document.getElementById('aiLoading').style.display = 'none';
+        
+        if (data.success) {
+          // Format bullet markdown lines visually to HTML
+          let formattedText = data.recommendation
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\n\n/g, '<br><br>');
+          
+          document.getElementById('aiResponseText').innerHTML = formattedText;
+          
+          // Setup binding to book direct button
+          const selectBtn = document.getElementById('aiBookingLinkBtn');
+          if (data.vehicleId) {
+            selectBtn.style.display = 'block';
+            selectBtn.onclick = () => {
+              // We need to fetch vehicles list if not already loaded
+              if (VEHICLES_LIST.length === 0) {
+                loadVehicles().then(() => openVehicleDetails(data.vehicleId));
+              } else {
+                openVehicleDetails(data.vehicleId);
+              }
+            };
+          } else {
+            selectBtn.style.display = 'none';
+          }
+
+          document.getElementById('aiResponsePanel').style.display = 'block';
+        } else {
+          showBanner(data.message || 'AI consulting failed', 'danger');
+          resetAIForm();
+        }
+      } catch (err) {
+        console.error(err);
+        showBanner('AI service connection error', 'danger');
+        resetAIForm();
+      }
+    }, 1800);
+  }
+
+  function resetAIForm() {
+    document.getElementById('aiResponsePanel').style.display = 'none';
+    document.getElementById('aiLoading').style.display = 'none';
+    document.getElementById('aiFormPanel').style.display = 'block';
+  }
+
+  // =================== PROFILE & BOOKINGS HISTORY ===================
+  
+  async function loadBookingHistory() {
+    if (!USER_TOKEN) return;
+    try {
+      const response = await fetch(`${BASE_URL}/api/bookings/history`, {
+        headers: { 'Authorization': `Bearer ${USER_TOKEN}` }
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        renderBookingHistory(data.bookings);
+        populateDamageBookingsSelect(data.bookings);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function renderBookingHistory(bookings) {
+    const container = document.getElementById('bookingHistoryContainer');
+    container.innerHTML = '';
+
+    if (!bookings || bookings.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 10px; color: var(--text-secondary);">
+          <i class="fa-regular fa-calendar-times" style="font-size: 2.2rem; opacity: 0.3; margin-bottom: 10px;"></i>
+          <p style="font-size: 0.85rem;">No booking rentals recorded yet.</p>
+        </div>
+      `;
+      return;
+    }
+
+    bookings.forEach(b => {
+      const isTripActive = b.status === 'Active';
+      const isTripCompleted = b.status === 'Completed';
+      
+      const pDate = new Date(b.pickupDate).toLocaleDateString('en-PK', { month: 'short', day: 'numeric', year: 'numeric' });
+      const rDate = new Date(b.returnDate).toLocaleDateString('en-PK', { month: 'short', day: 'numeric', year: 'numeric' });
+
+      const card = document.createElement('div');
+      card.className = 'booking-card';
+      
+      let statusClass = 'status-active';
+      if (b.status === 'Completed') statusClass = 'status-completed';
+      if (b.status === 'Cancelled') statusClass = 'status-cancelled';
+
+      let actionsHTML = '';
+      if (isTripActive) {
+        actionsHTML = `
+          <div class="booking-actions">
+            <button class="btn btn-outline btn-sm" onclick="completeTripOrder('${b._id}')">Complete Trip <i class="fa-solid fa-flag-checkered"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="cancelBookingOrder('${b._id}')">Cancel Rent <i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        `;
+      } else if (isTripCompleted) {
+        actionsHTML = `
+          <div class="booking-actions">
+            <button class="btn btn-secondary btn-sm" onclick="openDamageReportModal('${b._id}')"><i class="fa-solid fa-triangle-exclamation"></i> Damage Report</button>
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="booking-header">
+          <span class="booking-title">${b.vehicle ? b.vehicle.name : 'Unknown Ride'}</span>
+          <span class="booking-status ${statusClass}">${b.status}</span>
+        </div>
+        <div class="booking-detail-row">
+          <span>Booking ID:</span>
+          <strong>#${b._id.substr(b._id.length - 8).toUpperCase()}</strong>
+        </div>
+        <div class="booking-detail-row">
+          <span>Duration:</span>
+          <strong>${b.totalDays} ${b.totalDays === 1 ? 'Day' : 'Days'}</strong>
+        </div>
+        <div class="booking-detail-row">
+          <span>Dates:</span>
+          <strong>${pDate} - ${rDate}</strong>
+        </div>
+        <div class="booking-detail-row">
+          <span>Pickup Location:</span>
+          <strong>${b.pickupLocation}</strong>
+        </div>
+        <div class="booking-detail-row" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color);">
+          <span style="font-weight: 700; color: var(--accent);">Charged cost:</span>
+          <strong style="color: var(--accent);">PKR ${b.totalCost.toLocaleString()}</strong>
+        </div>
+        ${actionsHTML}
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  async function cancelBookingOrder(bookingId) {
+    if (!confirm("Are you sure you want to cancel this booking rental? 100% refund will credit to wallet balance.")) return;
+    try {
+      const response = await fetch(`${BASE_URL}/api/bookings/${bookingId}/cancel`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${USER_TOKEN}` }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showBanner(data.message);
+        CURRENT_USER.walletBalance = data.newWalletBalance;
+        syncUserInfoUI();
+        loadBookingHistory();
+      } else {
+        showBanner(data.message, 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Failed to cancel rental order', 'danger');
+    }
+  }
+
+  async function completeTripOrder(bookingId) {
+    try {
+      const response = await fetch(`${BASE_URL}/api/bookings/${bookingId}/complete`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${USER_TOKEN}` }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        showBanner(data.message);
+        loadBookingHistory();
+      } else {
+        showBanner(data.message, 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Failed to complete rental trip', 'danger');
+    }
+  }
+
+  // =================== MAP PIN GRAPHICS FLOW ===================
+  
+  async function renderMapPins() {
+    const map = document.getElementById('simulatedMap');
+    
+    // Clean old pins first
+    const pins = document.querySelectorAll('.vehicle-pin');
+    pins.forEach(p => p.remove());
+
+    if (VEHICLES_LIST.length === 0) {
+      await loadVehicles();
+    }
+
+    // Plot pins relative to simulated Lahore map center coordinates (approx layout mapping inside canvas)
+    // Map bounds simulation:
+    // Latitude center 31.5204 (y=50%), Longitude center 74.3587 (x=50%)
+    VEHICLES_LIST.forEach((v, index) => {
+      // Calculate delta positioning offsets
+      const latDelta = v.location.latitude - 31.5204;
+      const lngDelta = v.location.longitude - 74.3587;
+      
+      // Scale positioning mapping on 280px height & 350px width screen
+      const yOffsetPercent = 50 - (latDelta * 600); // Inverse scaling for latitude mapping
+      const xOffsetPercent = 50 + (lngDelta * 600);
+      
+      // Bounds checks
+      const top = Math.max(10, Math.min(85, yOffsetPercent));
+      const left = Math.max(10, Math.min(85, xOffsetPercent));
+
+      const pin = document.createElement('div');
+      pin.className = 'vehicle-pin';
+      pin.style.top = `${top}%`;
+      pin.style.left = `${left}%`;
+      pin.title = v.name;
+      
+      const pinIcon = v.type === 'car' ? '<i class="fa-solid fa-car"></i>' : '<i class="fa-solid fa-motorcycle"></i>';
+      pin.innerHTML = pinIcon;
+      
+      // On pin click, open vehicle detail modal
+      pin.addEventListener('click', () => {
+        openVehicleDetails(v._id);
+      });
+
+      map.appendChild(pin);
+    });
+  }
+
+  // =================== SIMULATED DOCUMENT UPLOAD HANDLERS ===================
+  
+  function openDocsUploadModal() {
+    document.getElementById('docsModal').style.display = 'flex';
+  }
+
+  function simulateDocUpload(type) {
+    if (type === 'cnic') {
+      document.getElementById('cnicPreview').src = simulatedCnicImage;
+      document.getElementById('cnicPreview').style.display = 'block';
+      document.getElementById('cnicUploadIcon').style.display = 'none';
+      document.getElementById('cnicUploadTitle').innerText = "CNIC_Photo_Front.jpg";
+      cnicUploadedSimulated = true;
+    } else if (type === 'license') {
+      document.getElementById('licensePreview').src = simulatedLicenseImage;
+      document.getElementById('licensePreview').style.display = 'block';
+      document.getElementById('licenseUploadIcon').style.display = 'none';
+      document.getElementById('licenseUploadTitle').innerText = "Driver_License_Front.jpg";
+      licenseUploadedSimulated = true;
+    } else if (type === 'damage') {
+      document.getElementById('damagePreview').src = simulatedDamageImage;
+      document.getElementById('damagePreview').style.display = 'block';
+      document.getElementById('damageUploadIcon').style.display = 'none';
+      document.getElementById('damageUploadTitle').innerText = "Damage_Evidence_1.jpg";
+      damagePhotoUploadedSimulated = true;
+    }
+  }
+
+  async function handleDocumentUploadSubmit() {
+    if (!cnicUploadedSimulated || !licenseUploadedSimulated) {
+      showBanner('Please upload both CNIC and Driver License photos to complete verification', 'danger');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/auth/upload-docs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${USER_TOKEN}`
+        },
+        body: JSON.stringify({
+          cnicData: simulatedCnicImage,
+          licenseData: simulatedLicenseImage
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        showBanner(data.message);
+        CURRENT_USER = data.user;
+        syncUserInfoUI();
+        closeModal('docsModal');
+      } else {
+        showBanner(data.message, 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Documentation service returned an error', 'danger');
+    }
+  }
+
+  // =================== POST-TRIP DAMAGE INCIDENTS REPORTS ===================
+  
+  function openDamageReportModal(preselectedBookingId = '') {
+    if (!USER_TOKEN) {
+      showBanner('Please sign in to file damage report', 'danger');
+      switchScreen('auth');
+      return;
+    }
+    
+    // Reset inputs
+    document.getElementById('damageDesc').value = '';
+    document.getElementById('damagePreview').style.display = 'none';
+    document.getElementById('damageUploadIcon').style.display = 'block';
+    document.getElementById('damageUploadTitle').innerText = "Tap to Take/Upload Photo";
+    damagePhotoUploadedSimulated = false;
+
+    // Load damage selects
+    document.getElementById('damageModal').style.display = 'flex';
+    
+    // Set booking selection dropdown
+    if (preselectedBookingId) {
+      document.getElementById('damageBookingSelect').value = preselectedBookingId;
+    }
+  }
+
+  function populateDamageBookingsSelect(bookings) {
+    const select = document.getElementById('damageBookingSelect');
+    select.innerHTML = '';
+    
+    // Only allow damage reporting for Completed or Active bookings
+    const eligible = bookings.filter(b => b.status === 'Completed' || b.status === 'Active');
+    
+    if (eligible.length === 0) {
+      select.innerHTML = `<option value="">No eligible trips found to report</option>`;
+      return;
+    }
+
+    eligible.forEach(b => {
+      const date = new Date(b.pickupDate).toLocaleDateString('en-PK', { month: 'short', day: 'numeric' });
+      select.innerHTML += `<option value="${b._id}">Booking #${b._id.substr(b._id.length - 6).toUpperCase()} — ${b.vehicle ? b.vehicle.name : 'Ride'} (${date})</option>`;
+    });
+  }
+
+  async function submitDamageLog() {
+    const bookingId = document.getElementById('damageBookingSelect').value;
+    const description = document.getElementById('damageDesc').value;
+
+    if (!bookingId) {
+      showBanner('Please select a valid booking trip record', 'danger');
+      return;
+    }
+
+    if (!description) {
+      showBanner('Please describe the damage incident details', 'danger');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/damage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${USER_TOKEN}`
+        },
+        body: JSON.stringify({
+          bookingId,
+          description,
+          photos: damagePhotoUploadedSimulated ? [simulatedDamageImage] : []
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        showBanner(data.message);
+        closeModal('damageModal');
+        switchScreen('profile');
+      } else {
+        showBanner(data.message, 'danger');
+      }
+    } catch (err) {
+      console.error(err);
+      showBanner('Incident reporting service offline', 'danger');
+    }
+  }
+
+  // =================== GENERAL UTILITIES ===================
+  
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+  }
+
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    const icon = document.getElementById('themeIcon');
+    
+    if (isDark) {
+      body.setAttribute('data-theme', 'light');
+      icon.className = 'fa-solid fa-sun';
+    } else {
+      body.setAttribute('data-theme', 'dark');
+      icon.className = 'fa-solid fa-moon';
+    }
+  }
+</script>
+
+</body>
+</html>
