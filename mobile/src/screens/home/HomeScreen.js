@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   statusBadge: {
-    position: absolute = 'absolute',
+    position: 'absolute',
     top: 16,
     right: 16,
     paddingVertical: 4,

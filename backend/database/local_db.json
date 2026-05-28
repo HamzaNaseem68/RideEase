@@ -3,24 +3,50 @@
     {
       "_id": "local_x8pv20pl1",
       "createdAt": "2026-05-24T10:27:41.187Z",
-      "updatedAt": "2026-05-24T17:37:51.750Z",
+      "updatedAt": "2026-05-28T21:22:10.519Z",
       "name": "Hamza Naseem",
       "email": "hamza@gmail.com",
       "password": "$2a$10$pkyg/k8tcvsgNsupnovnqe6gqKq3IRW3yNimBE3mRAbRNfcB8jnaO",
       "phone": "03306868211",
-      "walletBalance": 26000,
+      "walletBalance": 126000,
       "cnicUploaded": true,
       "licenseUploaded": true,
       "role": "user",
       "cnicUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300",
       "licenseUrl": "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&q=80&w=300"
+    },
+    {
+      "_id": "local_s55z5bcu9",
+      "createdAt": "2026-05-28T19:53:49.657Z",
+      "updatedAt": "2026-05-28T19:53:49.657Z",
+      "name": "Test AI User",
+      "email": "test_ai_44tte@rideease.pk",
+      "password": "$2a$10$Z6t0KgO8iO3IUfj5IwOjfOoQOti97eNfL0OqFjfWHKc.LYak.IbrG",
+      "phone": "03007055789",
+      "walletBalance": 10000,
+      "cnicUploaded": false,
+      "licenseUploaded": false,
+      "role": "user"
+    },
+    {
+      "_id": "local_kcqlzrpp5",
+      "createdAt": "2026-05-28T19:54:54.462Z",
+      "updatedAt": "2026-05-28T19:54:54.463Z",
+      "name": "Test AI User",
+      "email": "test_ai_demvt@rideease.pk",
+      "password": "$2a$10$A2SQN.CPTN3ss7MRa8htw.PXvL0Mpjdc.NSUCPLkermwq3DhR5S7C",
+      "phone": "03008732179",
+      "walletBalance": 10000,
+      "cnicUploaded": false,
+      "licenseUploaded": false,
+      "role": "user"
     }
   ],
   "vehicles": [
     {
-      "_id": "local_cy0lanfsa",
-      "createdAt": "2026-05-24T11:00:18.248Z",
-      "updatedAt": "2026-05-24T11:00:18.249Z",
+      "_id": "local_0wbxgji87",
+      "createdAt": "2026-05-28T20:28:31.516Z",
+      "updatedAt": "2026-05-28T20:28:31.520Z",
       "name": "Toyota Fortuner Legender",
       "type": "car",
       "image": "/images/fortuner_legender.png",
@@ -42,9 +68,9 @@
       ]
     },
     {
-      "_id": "local_y739da30x",
-      "createdAt": "2026-05-24T11:00:18.261Z",
-      "updatedAt": "2026-05-24T11:00:18.261Z",
+      "_id": "local_qxjzozfhv",
+      "createdAt": "2026-05-28T20:28:31.565Z",
+      "updatedAt": "2026-05-28T20:28:31.565Z",
       "name": "Honda Civic Oriel",
       "type": "car",
       "image": "/images/honda_civic.png",
@@ -66,9 +92,9 @@
       ]
     },
     {
-      "_id": "local_leh0v5773",
-      "createdAt": "2026-05-24T11:00:18.275Z",
-      "updatedAt": "2026-05-24T11:00:18.275Z",
+      "_id": "local_kekjdhh3g",
+      "createdAt": "2026-05-28T20:28:31.612Z",
+      "updatedAt": "2026-05-28T20:28:31.612Z",
       "name": "Suzuki Alto VXL",
       "type": "car",
       "image": "/images/suzuki_alto.png",
@@ -89,9 +115,9 @@
       ]
     },
     {
-      "_id": "local_4yajo78yn",
-      "createdAt": "2026-05-24T11:00:18.289Z",
-      "updatedAt": "2026-05-24T11:00:18.289Z",
+      "_id": "local_c2wotas9f",
+      "createdAt": "2026-05-28T20:28:31.645Z",
+      "updatedAt": "2026-05-28T20:28:31.645Z",
       "name": "MG HS Essence",
       "type": "car",
       "image": "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=600",
@@ -113,9 +139,9 @@
       ]
     },
     {
-      "_id": "local_2yvydk80d",
-      "createdAt": "2026-05-24T11:00:18.304Z",
-      "updatedAt": "2026-05-24T11:00:18.304Z",
+      "_id": "local_j2g61z29a",
+      "createdAt": "2026-05-28T20:28:31.681Z",
+      "updatedAt": "2026-05-28T20:28:31.681Z",
       "name": "Hyundai Tucson AWD",
       "type": "car",
       "image": "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=600",
@@ -136,9 +162,9 @@
       ]
     },
     {
-      "_id": "local_0yyyk11bs",
-      "createdAt": "2026-05-24T11:00:18.323Z",
-      "updatedAt": "2026-05-24T11:00:18.323Z",
+      "_id": "local_ekbjr8oel",
+      "createdAt": "2026-05-28T20:28:31.720Z",
+      "updatedAt": "2026-05-28T20:28:31.720Z",
       "name": "Changan Alsvin Lumiere",
       "type": "car",
       "image": "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80&w=600",
@@ -159,9 +185,9 @@
       ]
     },
     {
-      "_id": "local_ais254f6u",
-      "createdAt": "2026-05-24T11:00:18.346Z",
-      "updatedAt": "2026-05-24T11:00:18.346Z",
+      "_id": "local_wor63opkj",
+      "createdAt": "2026-05-28T20:28:31.758Z",
+      "updatedAt": "2026-05-28T20:28:31.758Z",
       "name": "Yamaha YBR 125G",
       "type": "bike",
       "image": "/images/yamaha_ybr125.png",
@@ -183,9 +209,9 @@
       ]
     },
     {
-      "_id": "local_j3dmx4xie",
-      "createdAt": "2026-05-24T11:00:18.363Z",
-      "updatedAt": "2026-05-24T11:00:18.363Z",
+      "_id": "local_h67en2ts0",
+      "createdAt": "2026-05-28T20:28:31.793Z",
+      "updatedAt": "2026-05-28T20:28:31.793Z",
       "name": "Suzuki GS 150 SE",
       "type": "bike",
       "image": "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&q=80&w=600",
@@ -206,9 +232,9 @@
       ]
     },
     {
-      "_id": "local_ld8kos272",
-      "createdAt": "2026-05-24T11:00:18.379Z",
-      "updatedAt": "2026-05-24T11:00:18.379Z",
+      "_id": "local_7y7b31lla",
+      "createdAt": "2026-05-28T20:28:31.830Z",
+      "updatedAt": "2026-05-28T20:28:31.830Z",
       "name": "Honda CG 125 Self-Start",
       "type": "bike",
       "image": "/images/honda_cg125.png",
@@ -229,9 +255,9 @@
       ]
     },
     {
-      "_id": "local_6bhtdsqpw",
-      "createdAt": "2026-05-24T11:00:18.394Z",
-      "updatedAt": "2026-05-24T11:00:18.394Z",
+      "_id": "local_hfld0kn09",
+      "createdAt": "2026-05-28T20:28:31.866Z",
+      "updatedAt": "2026-05-28T20:28:31.866Z",
       "name": "Vlektra Retro Electric Bike",
       "type": "bike",
       "image": "https://images.unsplash.com/photo-1515777315835-281b94c9589f?auto=format&fit=crop&q=80&w=600",
@@ -270,6 +296,40 @@
       "status": "Completed",
       "cnicUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300",
       "licenseUrl": "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&q=80&w=300"
+    },
+    {
+      "_id": "local_clkfonmmy",
+      "createdAt": "2026-05-28T12:09:49.021Z",
+      "updatedAt": "2026-05-28T20:02:02.357Z",
+      "user": "local_x8pv20pl1",
+      "vehicle": "local_agnv0s9cj",
+      "pickupDate": "2026-05-28T00:00:00.000Z",
+      "returnDate": "2026-05-30T00:00:00.000Z",
+      "pickupLocation": "Barkat Market",
+      "totalDays": 2,
+      "totalCost": 24000,
+      "insuranceSelected": false,
+      "deliverySelected": false,
+      "status": "Completed",
+      "cnicUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300",
+      "licenseUrl": "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&q=80&w=300"
+    },
+    {
+      "_id": "local_f6lfi8uqz",
+      "createdAt": "2026-05-28T20:01:28.983Z",
+      "updatedAt": "2026-05-28T20:02:01.245Z",
+      "user": "local_x8pv20pl1",
+      "vehicle": "local_1pak72fzb",
+      "pickupDate": "2026-05-28T00:00:00.000Z",
+      "returnDate": "2026-05-30T00:00:00.000Z",
+      "pickupLocation": "Gulberg III, Lahore",
+      "totalDays": 2,
+      "totalCost": 50000,
+      "insuranceSelected": false,
+      "deliverySelected": false,
+      "status": "Completed",
+      "cnicUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300",
+      "licenseUrl": "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&q=80&w=300"
     }
   ],
   "transactions": [
@@ -286,6 +346,78 @@
       "_id": "local_1jr39rcqv",
       "createdAt": "2026-05-24T17:37:51.825Z",
       "updatedAt": "2026-05-24T17:37:51.825Z",
+      "user": "local_x8pv20pl1",
+      "type": "Credit",
+      "amount": 25000,
+      "description": "Wallet Balance Top-up"
+    },
+    {
+      "_id": "local_b5lrbq65h",
+      "createdAt": "2026-05-28T12:09:48.943Z",
+      "updatedAt": "2026-05-28T12:09:48.943Z",
+      "user": "local_x8pv20pl1",
+      "type": "Debit",
+      "amount": 24000,
+      "description": "Rented Honda Civic Oriel for 2 days"
+    },
+    {
+      "_id": "local_di2yuo3ut",
+      "createdAt": "2026-05-28T20:01:28.886Z",
+      "updatedAt": "2026-05-28T20:01:28.886Z",
+      "user": "local_x8pv20pl1",
+      "type": "Debit",
+      "amount": 50000,
+      "description": "Rented Toyota Fortuner Legender for 2 days"
+    },
+    {
+      "_id": "local_pqszez7nn",
+      "createdAt": "2026-05-28T20:32:14.987Z",
+      "updatedAt": "2026-05-28T20:32:14.987Z",
+      "user": "local_x8pv20pl1",
+      "type": "Credit",
+      "amount": 5000,
+      "description": "Wallet Balance Top-up"
+    },
+    {
+      "_id": "local_qnhx8bt3w",
+      "createdAt": "2026-05-28T20:42:12.604Z",
+      "updatedAt": "2026-05-28T20:42:12.604Z",
+      "user": "local_x8pv20pl1",
+      "type": "Credit",
+      "amount": 10000,
+      "description": "Wallet Balance Top-up"
+    },
+    {
+      "_id": "local_6evubjyas",
+      "createdAt": "2026-05-28T20:45:25.656Z",
+      "updatedAt": "2026-05-28T20:45:25.657Z",
+      "user": "local_x8pv20pl1",
+      "type": "Credit",
+      "amount": 10000,
+      "description": "Wallet Balance Top-up"
+    },
+    {
+      "_id": "local_6elzaxtdi",
+      "createdAt": "2026-05-28T20:51:31.895Z",
+      "updatedAt": "2026-05-28T20:51:31.895Z",
+      "user": "local_x8pv20pl1",
+      "type": "Credit",
+      "amount": 25000,
+      "description": "Wallet Balance Top-up"
+    },
+    {
+      "_id": "local_3u606t3yk",
+      "createdAt": "2026-05-28T21:18:09.492Z",
+      "updatedAt": "2026-05-28T21:18:09.492Z",
+      "user": "local_x8pv20pl1",
+      "type": "Credit",
+      "amount": 1000,
+      "description": "Wallet Balance Top-up"
+    },
+    {
+      "_id": "local_8o75cwjzc",
+      "createdAt": "2026-05-28T21:22:10.583Z",
+      "updatedAt": "2026-05-28T21:22:10.583Z",
       "user": "local_x8pv20pl1",
       "type": "Credit",
       "amount": 25000,

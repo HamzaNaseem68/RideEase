@@ -149,6 +149,15 @@ export const api = {
         body: JSON.stringify(tripMetrics)
       });
       return await response.json();
+    },
+    chat: async (chatPayload) => {
+      const headers = await getHeaders();
+      const response = await fetch(`${API_URL}/api/ai/chat`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(chatPayload)
+      });
+      return await response.json();
     }
   },
 

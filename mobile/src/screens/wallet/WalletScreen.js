@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { api } from '../../services/api';
@@ -26,15 +27,17 @@ export default function WalletScreen() {
   const [selectedChip, setSelectedChip] = useState(10000);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchWalletData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchWalletData();
+    }, [])
+  );
 
   const fetchWalletData = async () => {
     try {
       const res = await api.wallet.get();
       if (res.success) {
-        setBalance(res.balance);
+        setBalance(res.balance !== undefined && res.balance !== null ? res.balance : 0);
         setTransactions(res.transactions || []);
       }
     } catch (err) {
@@ -130,7 +133,7 @@ export default function WalletScreen() {
           <View style={styles.cardHeader}>
             <View>
               <Text style={styles.cardLabel}>Available Balance</Text>
-              <Text style={styles.cardBalance}>PKR {balance.toLocaleString()}</Text>
+              <Text style={styles.cardBalance}>PKR {(balance || 0).toLocaleString()}</Text>
             </View>
             <View style={styles.cardChip} />
           </View>

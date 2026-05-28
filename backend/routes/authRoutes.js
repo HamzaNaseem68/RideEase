@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
       email,
       password: hashedPassword,
       phone: phone || '',
-      walletBalance: 10000, // Gift Rs. 10,000 wallet balance on sign-up to make the app interactive immediately!
+      walletBalance: 100000, // Gift Rs. 100,000 wallet balance on sign-up to make the app interactive immediately!
       cnicUploaded: false,
       licenseUploaded: false,
       role: email.includes('admin') ? 'admin' : 'user' // auto-grant admin if email contains 'admin' for easy testing

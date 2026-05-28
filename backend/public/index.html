@@ -480,6 +480,7 @@
     /* HOME SCREEN SPECIFIC */
     .home-header {
       margin-bottom: 20px;
+      flex-shrink: 0;
     }
 
     .welcome-text {
@@ -496,6 +497,7 @@
     .search-bar-container {
       position: relative;
       margin-bottom: 20px;
+      flex-shrink: 0;
     }
 
     .search-bar-container i {
@@ -515,7 +517,8 @@
       gap: 10px;
       margin-bottom: 20px;
       overflow-x: auto;
-      padding-bottom: 5px;
+      padding: 6px 4px 10px 4px;
+      flex-shrink: 0;
     }
 
     .filter-tabs::-webkit-scrollbar {
@@ -557,6 +560,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
     }
 
     /* VEHICLE CARD */
@@ -646,15 +650,19 @@
 
     /* DIGITAL WALLET CARD */
     .credit-card {
-      background: linear-gradient(135deg, #0A1628 0%, #1E1B4B 100%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 20px;
-      color: #FFFFFF;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #0A1628 0%, #1E1B4B 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 20px !important;
+      padding: 22px 20px !important;
+      color: #FFFFFF !important;
+      position: relative !important;
+      overflow: hidden !important;
+      margin-bottom: 24px !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
+      min-height: 165px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
     }
 
     .credit-card::before {
@@ -666,41 +674,49 @@
       border-radius: 50%;
       top: -30px;
       right: -30px;
+      pointer-events: none;
     }
 
     .card-chip {
-      width: 40px;
-      height: 30px;
-      background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%);
-      border-radius: 6px;
-      margin-bottom: 20px;
+      width: 44px !important;
+      height: 32px !important;
+      background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%) !important;
+      border-radius: 6px !important;
+      margin-bottom: 0 !important;
     }
 
     .card-balance-lbl {
-      font-size: 0.75rem;
-      color: #94A3B8;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-size: 0.75rem !important;
+      color: #94A3B8 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
     }
 
     .card-balance {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #FFFFFF;
-      margin-top: 4px;
+      font-size: 1.8rem !important;
+      font-weight: 800 !important;
+      color: #F59E0B !important;
+      margin-top: 6px !important;
+      line-height: 1.2 !important;
+      display: block !important;
+      position: relative !important;
+      z-index: 10 !important;
     }
 
     .card-holder-row {
-      margin-top: 30px;
+      margin-top: 24px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
     }
 
     .card-holder {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #E2E8F0;
+      font-size: 0.85rem !important;
+      font-weight: 700 !important;
+      color: #FFFFFF !important;
+      display: block !important;
+      position: relative !important;
+      z-index: 10 !important;
     }
 
     .card-logo {
@@ -871,55 +887,240 @@
     }
 
     /* AI CHAT SCREEN SPECIFIC */
-    .ai-processing {
-      display: none;
-      flex-direction: column;
+    .ai-chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .ai-chat-title-group h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .ai-connection-indicator {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .ai-connection-indicator span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      display: inline-block;
+    }
+
+    .ai-settings-toggle-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color);
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s;
     }
 
-    .ai-spinner {
-      font-size: 3rem;
+    .ai-settings-toggle-btn:hover {
       color: var(--accent);
-      animation: spin 1.5s infinite linear;
-      margin-bottom: 20px;
+      background: rgba(255,255,255,0.08);
     }
 
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
+    /* Scrollable message thread list */
+    .chat-messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .ai-recommendation-card {
-      border: 1px solid var(--accent);
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(16, 185, 129, 0.03) 100%);
-      padding: 20px;
-      border-radius: 20px;
-      margin-bottom: 20px;
+    .chat-messages-container::-webkit-scrollbar {
+      width: 3px;
     }
 
-    .ai-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    /* Message bubble wraps */
+    .chat-msg-row {
+      display: flex;
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    .chat-msg-row.user-msg {
+      justify-content: flex-end;
+    }
+
+    .chat-msg-row.ai-msg {
+      justify-content: flex-start;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .user-msg .chat-bubble {
       background: var(--accent);
-      color: #000;
-      font-size: 0.7rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 100px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+      color: #000000;
+      border-bottom-right-radius: 4px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
     }
 
-    .ai-response-body {
-      font-size: 0.85rem;
-      line-height: 1.6;
+    .ai-msg .chat-bubble {
+      background: var(--bg-card);
       color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+      border: 1px solid var(--border-color);
     }
 
-    .ai-response-body strong {
+    .chat-bubble strong {
       color: var(--accent);
+    }
+    
+    .user-msg .chat-bubble strong {
+      color: #000;
+    }
+
+    .chat-bubble p {
+      margin-bottom: 6px;
+    }
+    
+    .chat-bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Thinking/Typing animation bubble */
+    .chat-thinking-bubble {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    .chat-thinking-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--text-secondary);
+      border-radius: 50%;
+      animation: thinkingDot 1.4s infinite ease-in-out;
+      opacity: 0.4;
+    }
+
+    .chat-thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+    .chat-thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes thinkingDot {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* Dynamic Inline Product Card */
+    .chat-product-card {
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.06) 0%, rgba(18, 24, 41, 0.95) 100%);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 8px;
+      max-width: 85%;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeIn 0.4s ease-out;
+      align-self: flex-start;
+    }
+
+    .chat-product-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chat-product-img {
+      width: 70px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .chat-product-meta h4 {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .chat-product-price {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .chat-product-specs {
+      display: flex;
+      gap: 10px;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+    }
+
+    /* Chat Input Bar */
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 4px 6px 4px 14px;
+      flex-shrink: 0;
+    }
+
+    .chat-input-field {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      height: 38px;
+    }
+
+    .chat-send-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #000000;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
+    }
+
+    .chat-send-btn:hover {
+      background: var(--accent-hover);
     }
 
     /* BOOKING LIST CARD */
@@ -1298,81 +1499,75 @@
           </div>
         </div>
 
-        <!-- =================== SCREEN 4: AI RECOMMENDER =================== -->
-        <div class="screen" id="aiScreen">
-          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">AI Recommendation</h2>
-          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 20px;">Enter your trip metrics to generate optimal advice</p>
-
-          <!-- Input Panel Form -->
-          <div id="aiFormPanel">
-            <div class="form-group">
-              <label>Budget (PKR)</label>
-              <input type="number" id="aiBudget" class="form-control" value="20000">
-            </div>
-
-            <div class="form-group">
-              <label>Passengers</label>
-              <select id="aiPassengers" class="form-control">
-                <option value="1">1 Person (Solo)</option>
-                <option value="2" selected>2 People</option>
-                <option value="4">4 People</option>
-                <option value="5">5 People</option>
-                <option value="7">7 People (Family)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Trip Type</label>
-              <select id="aiTripType" class="form-control">
-                <option value="City travel" selected>City travel (Daily commute)</option>
-                <option value="Long distance">Long distance (Highway cruising)</option>
-                <option value="Family trip">Family trip (Spacious & relaxed)</option>
-                <option value="Adventure">Adventure (Rugged terrains)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Trip Duration (Days)</label>
-              <input type="number" id="aiDuration" class="form-control" value="3">
-            </div>
-
-            <div class="form-group">
-              <label>Fuel Preference</label>
-              <select id="aiFuel" class="form-control">
-                <option value="No preference" selected>No preference</option>
-                <option value="Petrol">Petrol</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Electric">Electric</option>
-              </select>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 24px;">
-              <label>Est. Daily Distance (KM)</label>
-              <input type="number" id="aiDistance" class="form-control" value="120">
-            </div>
-
-            <button class="btn" onclick="submitAIRecommend()"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze & Recommend</button>
-          </div>
-
-          <!-- Loading Screen state -->
-          <div class="ai-processing" id="aiLoading">
-            <i class="fa-solid fa-wand-magic-sparkles ai-spinner"></i>
-            <h3 style="font-weight: 700;">RideEase AI Consulting...</h3>
-            <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center; margin-top: 6px; padding: 0 20px;">Analyzing fuel ranges, passenger profiles, and budgets to select the perfect ride...</p>
-          </div>
-
-          <!-- AI Response Card -->
-          <div id="aiResponsePanel" style="display: none;">
-            <div class="ai-recommendation-card">
-              <div class="ai-badge"><i class="fa-solid fa-brain"></i> Recommended Match</div>
-              <div class="ai-response-body" id="aiResponseText">
-                <!-- AI dynamic recommendations -->
+        <!-- =================== SCREEN 4: AI COPILOT CHAT =================== -->
+        <div class="screen" id="aiScreen" style="padding: 16px 14px; flex-direction: column; height: 100%;">
+          
+          <!-- Chat Header with Settings Gear -->
+          <div class="ai-chat-header">
+            <div class="ai-chat-title-group">
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">Smart AI Copilot</h2>
+              <div class="ai-connection-indicator">
+                <span id="aiActiveIndicatorDot"></span>
+                <span id="aiActiveIndicatorText">Gemini (Active)</span>
               </div>
             </div>
-            
-            <button class="btn" id="aiBookingLinkBtn" onclick="openDetailsFromAI()">Book Recommended Match <i class="fa-solid fa-circle-chevron-right"></i></button>
-            <button class="btn btn-outline" style="margin-top: 10px;" onclick="resetAIForm()">New Consultation</button>
+            <div class="ai-settings-toggle-btn" onclick="toggleAiSettingsPanel()">
+              <i class="fa-solid fa-gear"></i>
+            </div>
           </div>
+
+          <!-- Collapsible AI Settings Panel -->
+          <div id="aiSettingsPanel" class="glass-card" style="display: none; padding: 12px; margin-bottom: 12px; border-color: rgba(245, 158, 11, 0.25);">
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label style="color: var(--accent); font-size: 0.65rem; font-weight: 700; margin-bottom: 4px; text-transform: uppercase;">AI Advisor Engine</label>
+              <select id="aiEngineSelect" class="form-control" onchange="toggleAiEngineKeyInput()" style="padding: 8px; font-size: 0.8rem; border-color: rgba(245, 158, 11, 0.3); font-weight: 600; height: 36px;">
+                <option value="gemini" selected>✨ Google Gemini (Recommended)</option>
+                <option value="openai">🧠 OpenAI GPT-4o-mini</option>
+                <option value="local">📴 Offline Local Rule-Based</option>
+              </select>
+            </div>
+            
+            <div class="form-group" id="aiApiKeyGroup" style="margin-bottom: 0;">
+              <label id="aiApiKeyLabel" style="font-size: 0.65rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase;">Google Gemini API Key</label>
+              <div style="position: relative; display: flex; align-items: center;">
+                <input type="password" id="aiApiKeyInput" class="form-control" placeholder="Reads from .env if empty" style="padding: 8px 36px 8px 10px; font-size: 0.75rem; border-color: rgba(255,255,255,0.1); height: 34px;" oninput="saveAiKeyOnInput()">
+                <i class="fa-solid fa-eye-slash" id="toggleAiKeyVisibility" onclick="toggleApiKeyVisibility()" style="position: absolute; right: 10px; cursor: pointer; color: var(--text-secondary); padding: 4px; font-size: 0.8rem;"></i>
+              </div>
+              <div style="margin-top: 4px; font-size: 0.6rem; color: var(--text-secondary); line-height: 1.2;" id="aiKeyGuideLink">
+                Don't have a key? <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent); text-decoration: underline;">Get free Gemini Key</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages Thread Timeline -->
+          <div class="chat-messages-container" id="chatMessageList">
+            <!-- Initial Copilot Welcome Message -->
+            <div class="chat-msg-row ai-msg">
+              <div class="chat-bubble">
+                <p>Assalam-o-Alaikum! Main aap ka <strong>RideEase AI Copilot</strong> hoon. 🚗✨</p>
+                <p>Mujhe batayein ke aap ka trip kahan ka hai, kitne log hain, ya kya budget hai? Main aap ko bilkul sahi gaari ya bike match kar ke doon ga!</p>
+                <p style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px; font-style: italic;">e.g., "Need an Alto for city driving" ya "Luxury family trip to Murree"</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing Indicator (Initially Hidden) -->
+          <div class="chat-msg-row ai-msg" id="chatThinkingIndicator" style="display: none;">
+            <div class="chat-bubble chat-thinking-bubble">
+              <div class="chat-thinking-dot"></div>
+              <div class="chat-thinking-dot"></div>
+              <div class="chat-thinking-dot"></div>
+            </div>
+          </div>
+
+          <!-- Chat Input Bottom Bar -->
+          <div class="chat-input-bar" style="margin-top: 8px;">
+            <input type="text" id="chatInputField" class="chat-input-field" placeholder="Type trip description..." onkeypress="handleChatKeyPress(event)">
+            <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatUserMessage()">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+
         </div>
 
         <!-- =================== SCREEN 5: DIGITAL WALLET =================== -->
@@ -1578,6 +1773,12 @@
           
           <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 20px;">Upload government documents to confirm vehicle driving insurance compliance.</p>
 
+          <!-- PREMIUM UX SHORTCUT FOR FAST TESTING -->
+          <div class="glass-card" style="border-color: var(--accent); padding: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background: var(--accent-light);">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent);"><i class="fa-solid fa-bolt"></i> Fast Testing: Skip manual uploads?</span>
+            <button class="btn btn-sm" onclick="autoFillMockDocs()" style="width: auto; padding: 6px 12px; font-size: 0.7rem; font-weight: 800; background: var(--accent); color: #000; border-radius: 8px;">Verify In 1-Click</button>
+          </div>
+
           <div class="form-group">
             <label>CNIC (National Identity Card)</label>
             <div class="doc-upload-box" onclick="simulateDocUpload('cnic')">
@@ -1690,6 +1891,9 @@
     } else {
       switchScreen('auth');
     }
+
+    // Load saved AI configurations
+    initAiEngineUI();
   });
 
   // Switch Screens helper
@@ -1862,9 +2066,11 @@
 
   function syncUserInfoUI() {
     if (!CURRENT_USER) return;
+    
     document.getElementById('homeUserGreeting').innerText = CURRENT_USER.name;
     document.getElementById('walletUserDisplay').innerText = CURRENT_USER.name;
-    document.getElementById('walletBalanceDisplay').innerText = `PKR ${CURRENT_USER.walletBalance.toLocaleString()}`;
+    const balance = (CURRENT_USER.walletBalance !== undefined && CURRENT_USER.walletBalance !== null) ? CURRENT_USER.walletBalance : 0;
+    document.getElementById('walletBalanceDisplay').innerText = `PKR ${balance.toLocaleString()}`;
     
     // Sync verification badges
     const cnicBadge = document.getElementById('cnicBadge');
@@ -2148,9 +2354,11 @@
       const data = await response.json();
       
       if (data.success) {
-        document.getElementById('walletBalanceDisplay').innerText = `PKR ${data.balance.toLocaleString()}`;
+        const balance = (data.balance !== undefined && data.balance !== null) ? data.balance : 0;
+        document.getElementById('walletBalanceDisplay').innerText = `PKR ${balance.toLocaleString()}`;
+
         if (CURRENT_USER) {
-          CURRENT_USER.walletBalance = data.balance;
+          CURRENT_USER.walletBalance = balance;
           syncUserInfoUI();
         }
         renderLedger(data.transactions);
@@ -2261,89 +2469,233 @@
 
   // =================== AI VEHICLE RECOMMENDER FLOW ===================
   
-  async function submitAIRecommend() {
+  let chatHistory = [
+    { role: 'assistant', content: 'Assalam-o-Alaikum! Main aap ka RideEase AI Copilot hoon. 🚗✨\n\nMujhe batayein ke aap ka trip kahan ka hai, kitne log hain, ya kya budget hai? Main aap ko bilkul sahi gaari ya bike match kar ke doon ga!\n\ne.g., "Need an Alto for city driving" ya "Luxury family trip to Murree"' }
+  ];
+
+  function toggleAiSettingsPanel() {
+    const panel = document.getElementById('aiSettingsPanel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Custom API keys visibility and loading helpers
+  function initAiEngineUI() {
+    const savedEngine = localStorage.getItem('rideease_ai_engine') || 'gemini';
+    document.getElementById('aiEngineSelect').value = savedEngine;
+    
+    // Load cached keys
+    const geminiKey = localStorage.getItem('rideease_ai_key_gemini') || '';
+    const openaiKey = localStorage.getItem('rideease_ai_key_openai') || '';
+    
+    if (savedEngine === 'gemini') {
+      document.getElementById('aiApiKeyInput').value = geminiKey;
+    } else if (savedEngine === 'openai') {
+      document.getElementById('aiApiKeyInput').value = openaiKey;
+    }
+    
+    toggleAiEngineKeyInput();
+  }
+
+  function toggleAiEngineKeyInput() {
+    const engine = document.getElementById('aiEngineSelect').value;
+    const keyGroup = document.getElementById('aiApiKeyGroup');
+    const keyLabel = document.getElementById('aiApiKeyLabel');
+    const keyInput = document.getElementById('aiApiKeyInput');
+    const guideLink = document.getElementById('aiKeyGuideLink');
+    
+    // Save current engine choice
+    localStorage.setItem('rideease_ai_engine', engine);
+
+    // Sync header connection label and dot
+    const dot = document.getElementById('aiActiveIndicatorDot');
+    const text = document.getElementById('aiActiveIndicatorText');
+    
+    if (dot && text) {
+      if (engine === 'gemini') {
+        dot.style.backgroundColor = 'var(--success)';
+        text.innerText = "Gemini (Active)";
+      } else if (engine === 'openai') {
+        dot.style.backgroundColor = '#007AFF';
+        text.innerText = "OpenAI GPT (Active)";
+      } else {
+        dot.style.backgroundColor = '#64748B';
+        text.innerText = "Offline Matcher (Active)";
+      }
+    }
+
+    if (engine === 'local') {
+      keyGroup.style.display = 'none';
+      return;
+    }
+
+    keyGroup.style.display = 'block';
+    
+    if (engine === 'gemini') {
+      keyLabel.innerText = "Google Gemini API Key";
+      keyInput.placeholder = "Paste your Gemini key (reads from .env if empty)";
+      keyInput.value = localStorage.getItem('rideease_ai_key_gemini') || '';
+      guideLink.innerHTML = `Don't have a key? <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent); text-decoration: underline;">Get free Gemini Key</a>`;
+    } else {
+      keyLabel.innerText = "OpenAI API Key";
+      keyInput.placeholder = "Paste your OpenAI key (sk-...)";
+      keyInput.value = localStorage.getItem('rideease_ai_key_openai') || '';
+      guideLink.innerHTML = `Need an OpenAI key? <a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--accent); text-decoration: underline;">Get OpenAI Key</a>`;
+    }
+  }
+
+  function toggleApiKeyVisibility() {
+    const keyInput = document.getElementById('aiApiKeyInput');
+    const eyeIcon = document.getElementById('toggleAiKeyVisibility');
+    
+    if (keyInput.type === 'password') {
+      keyInput.type = 'text';
+      eyeIcon.classList.remove('fa-eye-slash');
+      eyeIcon.classList.add('fa-eye');
+    } else {
+      keyInput.type = 'password';
+      eyeIcon.classList.remove('fa-eye');
+      eyeIcon.classList.add('fa-eye-slash');
+    }
+  }
+
+  function saveAiKeyOnInput() {
+    const engine = document.getElementById('aiEngineSelect').value;
+    const keyValue = document.getElementById('aiApiKeyInput').value;
+    
+    if (engine === 'gemini') {
+      localStorage.setItem('rideease_ai_key_gemini', keyValue);
+    } else if (engine === 'openai') {
+      localStorage.setItem('rideease_ai_key_openai', keyValue);
+    }
+  }
+
+  function handleChatKeyPress(event) {
+    if (event.key === 'Enter') {
+      sendChatUserMessage();
+    }
+  }
+
+  function scrollToBottom() {
+    const chatList = document.getElementById('chatMessageList');
+    if (chatList) {
+      chatList.scrollTop = chatList.scrollHeight;
+    }
+  }
+
+  function appendChatBubble(role, content) {
+    const chatList = document.getElementById('chatMessageList');
+    if (!chatList) return;
+    
+    const row = document.createElement('div');
+    row.className = `chat-msg-row ${role === 'user' ? 'user-msg' : 'ai-msg'}`;
+    
+    // Format bold markdown lines visually to HTML
+    let formattedText = content
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '<br>')
+      .replace(/\n/g, '<br>');
+
+    row.innerHTML = `<div class="chat-bubble">${formattedText}</div>`;
+    chatList.appendChild(row);
+    scrollToBottom();
+  }
+
+  function appendProductCard(vehicleId) {
+    const vehicle = VEHICLES_LIST.find(v => v._id === vehicleId);
+    if (!vehicle) return;
+
+    const chatList = document.getElementById('chatMessageList');
+    if (!chatList) return;
+
+    const card = document.createElement('div');
+    card.className = 'chat-product-card';
+    
+    const seatsText = vehicle.type === 'car' ? `${vehicle.seatingCapacity} Seater` : 'Solo/Dual Rider';
+
+    card.innerHTML = `
+      <div class="chat-product-header">
+        <img src="${vehicle.image}" class="chat-product-img" alt="${vehicle.name}">
+        <div class="chat-product-meta">
+          <h4 style="margin: 0; font-size: 0.82rem; font-weight: 800; color: #FFF;">${vehicle.name}</h4>
+          <div class="chat-product-price" style="color: var(--accent); font-size: 0.75rem; font-weight: 700; margin-top: 2px;">PKR ${vehicle.pricePerDay.toLocaleString()} / day</div>
+        </div>
+      </div>
+      <div class="chat-product-specs" style="display: flex; gap: 8px; font-size: 0.65rem; color: var(--text-secondary); margin-top: 4px;">
+        <span><i class="fa-solid fa-gears"></i> ${vehicle.transmission}</span>
+        <span><i class="fa-solid fa-gas-pump"></i> ${vehicle.fuelType}</span>
+        <span><i class="fa-solid fa-users"></i> ${seatsText}</span>
+      </div>
+      <button class="btn btn-sm" onclick="openVehicleDetails('${vehicle._id}')" style="margin-top: 6px; font-size: 0.72rem; padding: 4px 8px; text-transform: uppercase;">Rent Now <i class="fa-solid fa-circle-check"></i></button>
+    `;
+    
+    chatList.appendChild(card);
+    scrollToBottom();
+  }
+
+  async function sendChatUserMessage() {
     if (!USER_TOKEN) {
-      showBanner('Please sign in to consulting the AI assistant', 'danger');
+      showBanner('Please sign in to chat with the AI assistant', 'danger');
       switchScreen('auth');
       return;
     }
 
-    const budget = parseFloat(document.getElementById('aiBudget').value);
-    const passengers = parseInt(document.getElementById('aiPassengers').value, 10);
-    const tripType = document.getElementById('aiTripType').value;
-    const duration = parseInt(document.getElementById('aiDuration').value, 10);
-    const fuelPreference = document.getElementById('aiFuel').value;
-    const dailyDistance = parseFloat(document.getElementById('aiDistance').value);
+    const input = document.getElementById('chatInputField');
+    const messageText = input.value.trim();
+    if (!messageText) return;
 
-    // Enter processing screen
-    document.getElementById('aiFormPanel').style.display = 'none';
-    document.getElementById('aiLoading').style.display = 'flex';
-    
-    // Simple artificial time delay for outstanding premium aesthetic UX (feel like real thinking AI processing)
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/api/ai/recommend`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${USER_TOKEN}`
-          },
-          body: JSON.stringify({
-            budget,
-            passengers,
-            tripType,
-            duration,
-            fuelPreference,
-            dailyDistance
-          })
-        });
+    // Clear input
+    input.value = '';
 
-        const data = await response.json();
-        
-        document.getElementById('aiLoading').style.display = 'none';
-        
-        if (data.success) {
-          // Format bullet markdown lines visually to HTML
-          let formattedText = data.recommendation
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            .replace(/\n\n/g, '<br><br>');
-          
-          document.getElementById('aiResponseText').innerHTML = formattedText;
-          
-          // Setup binding to book direct button
-          const selectBtn = document.getElementById('aiBookingLinkBtn');
-          if (data.vehicleId) {
-            selectBtn.style.display = 'block';
-            selectBtn.onclick = () => {
-              // We need to fetch vehicles list if not already loaded
-              if (VEHICLES_LIST.length === 0) {
-                loadVehicles().then(() => openVehicleDetails(data.vehicleId));
-              } else {
-                openVehicleDetails(data.vehicleId);
-              }
-            };
-          } else {
-            selectBtn.style.display = 'none';
+    // Render User Message bubble
+    appendChatBubble('user', messageText);
+    chatHistory.push({ role: 'user', content: messageText });
+
+    // Show Thinking indicator
+    const thinking = document.getElementById('chatThinkingIndicator');
+    thinking.style.display = 'flex';
+    scrollToBottom();
+
+    const aiEngine = document.getElementById('aiEngineSelect').value;
+    const customApiKey = document.getElementById('aiApiKeyInput').value.trim();
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/ai/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${USER_TOKEN}`
+        },
+        body: JSON.stringify({
+          messages: chatHistory,
+          aiEngine,
+          customApiKey
+        })
+      });
+
+      const data = await response.json();
+      thinking.style.display = 'none';
+
+      if (data.success) {
+        // Render AI Message bubble
+        appendChatBubble('assistant', data.reply);
+        chatHistory.push({ role: 'assistant', content: data.reply });
+
+        // If a vehicle matched, render inline product card!
+        if (data.matchedVehicleId) {
+          if (VEHICLES_LIST.length === 0) {
+            await loadVehicles();
           }
-
-          document.getElementById('aiResponsePanel').style.display = 'block';
-        } else {
-          showBanner(data.message || 'AI consulting failed', 'danger');
-          resetAIForm();
+          appendProductCard(data.matchedVehicleId);
         }
-      } catch (err) {
-        console.error(err);
-        showBanner('AI service connection error', 'danger');
-        resetAIForm();
+      } else {
+        appendChatBubble('assistant', `⚠️ Sorry, I encountered an error: ${data.message || 'Unknown processing error'}`);
       }
-    }, 1800);
-  }
-
-  function resetAIForm() {
-    document.getElementById('aiResponsePanel').style.display = 'none';
-    document.getElementById('aiLoading').style.display = 'none';
-    document.getElementById('aiFormPanel').style.display = 'block';
+    } catch (err) {
+      console.error(err);
+      thinking.style.display = 'none';
+      appendChatBubble('assistant', '⚠️ Connection lost. Please check if your backend server is active and try again.');
+    }
   }
 
   // =================== PROFILE & BOOKINGS HISTORY ===================
@@ -2556,6 +2908,12 @@
       document.getElementById('damageUploadTitle').innerText = "Damage_Evidence_1.jpg";
       damagePhotoUploadedSimulated = true;
     }
+  }
+
+  function autoFillMockDocs() {
+    simulateDocUpload('cnic');
+    simulateDocUpload('license');
+    handleDocumentUploadSubmit();
   }
 
   async function handleDocumentUploadSubmit() {
